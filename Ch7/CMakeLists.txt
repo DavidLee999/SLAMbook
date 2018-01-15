@@ -9,3 +9,6 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable( feature_extraction feature_extraction.cpp )
 target_link_libraries(feature_extraction ${OpenCV_LIBS} )
+
+add_executable( pose_estimation_2d2d pose_estimation_2d2d.cpp )
+target_link_libraries(pose_estimation_2d2d ${OpenCV_LIBS} )
