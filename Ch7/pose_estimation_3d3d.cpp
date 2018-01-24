@@ -4,12 +4,12 @@ using namespace std;
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d/features2d.hpp>
-#include <opencv2/highgui/highgui.hpo>
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 using namespace cv;
 
-#include <Eigen/Geometry>
 #include <Eigen/Core>
+#include <Eigen/Geometry>
 #include <Eigen/SVD>
 
 #include <g2o/core/base_vertex.h>
@@ -63,7 +63,7 @@ class EdgeProjectXYZRGBDPoseOnly : public g2o::BaseUnaryEdge<3, Eigen::Vector3d,
             _jacobianOplusXi(0, 2) = y;
             _jacobianOplusXi(0, 3) = -1;
             _jacobianOplusXi(0, 4) = 0;
-            -_jacobianOplusXi(0, 5) = 0;
+            _jacobianOplusXi(0, 5) = 0;
 
             _jacobianOplusXi(1, 0) = z;
             _jacobianOplusXi(1, 1) = 0;
@@ -109,7 +109,7 @@ int main(int argc, char** argv)
     Mat depth1 = imread(argv[3], CV_LOAD_IMAGE_UNCHANGED);
     Mat depth2 = imread(argv[4], CV_LOAD_IMAGE_UNCHANGED);
 
-    Mat K - (Mat_<double>(3, 3) << 520.9, 0, 325.1, 0, 521.0, 249.7, 0, 0, 1);
+    Mat K = (Mat_<double>(3, 3) << 520.9, 0, 325.1, 0, 521.0, 249.7, 0, 0, 1);
     vector<Point3f> pts1, pts2;
 
     for (DMatch m : matches)
@@ -132,6 +132,16 @@ int main(int argc, char** argv)
 
     cout << "3d - 3d pairs: " << pts1.size() << endl;
 
+    Mat R, t;
+    pose_estimation_3d3d(pts1, pts2, R, t);
+
+    cout << "ICP via SVD results: \n";
+    cout << "R = " << R << endl;
+    cout << "t = " << t << endl;
+    cout << "R_inv = " << R.t() << endl;
+    cout << "t_inv = " << -R.t() * t << endl;
+
+    cout << "calling bundl adjustment ...\n";
     bundleAdjustment(pts1, pts2, R, t);
 
     for (int i = 0; i < 5; i++)
@@ -140,7 +150,7 @@ int main(int argc, char** argv)
         cout << "p2 = " << pts2[i] << endl;
 
         cout << "(R * p2 + t) = "<< 
-            R * (Mat_<double(3, 1) << pts2[i].x, pts2[i].y, pts2[i].z) + t
+            R * (Mat_<double>(3, 1) << pts2[i].x, pts2[i].y, pts2[i].z) + t
             << endl << endl;
     }
 }
@@ -162,7 +172,7 @@ void find_feature_matches(const Mat& img_1, const Mat& img_2, std::vector<KeyPoi
     descriptor->compute(img_2, keypoints_2, descriptors_2);
 
     vector<DMatch> match;
-    matcher->match(descriptors_1, descriptors_2);
+    matcher->match(descriptors_1, descriptors_2, match);
 
     double min_dist = 10000, max_dist = 0;
     for (int i = 0; i <descriptors_1.rows; i++)
@@ -178,11 +188,19 @@ void find_feature_matches(const Mat& img_1, const Mat& img_2, std::vector<KeyPoi
     printf("-- Min dist = %f \n", min_dist);
 
     for (int i = 0; i < descriptors_1.rows; i++)
-        if (match[i].distane <= max(2 *min_dist, 30.0))
+        if (match[i].distance <= max(2 *min_dist, 30.0))
             matches.push_back(match[i]);
 }
 
-void pose_estimation_3d3d(const vector<Point3f>& pts1, const vector<Point3f>& pts2, Mat& R, mat& t)
+Point2d pixel2cam(const Point2d& p, const Mat& K)
+{
+    return Point2d { 
+        (p.x - K.at<double>(0, 2)) / K.at<double>(0, 0),
+        (p.y - K.at<double>(1, 2)) / K.at<double>(1, 1)
+    };
+}
+
+void pose_estimation_3d3d(const vector<Point3f>& pts1, const vector<Point3f>& pts2, Mat& R, Mat& t)
 {
     Point3f p1, p2;
     int N = pts1.size();
@@ -197,7 +215,7 @@ void pose_estimation_3d3d(const vector<Point3f>& pts1, const vector<Point3f>& pt
     vector<Point3f> q1(N), q2(N);
     for (int i = 0; i < N; i++)
     {
-        q1[i] = pts1[i] = p1;
+        q1[i] = pts1[i] - p1;
         q2[i] = pts2[i] - p2;
     }
 
@@ -216,7 +234,7 @@ void pose_estimation_3d3d(const vector<Point3f>& pts1, const vector<Point3f>& pt
 
     Eigen::Matrix3d R_ = U * (V.transpose());
 
-    Eigen::Matrix3d t_ = Eigen::Vector3d(p1.x, p1.y, p1.z) - R_ * Eigen::Vector3d(p2.x, p2.y, p2.z);
+    Eigen::Vector3d t_ = Eigen::Vector3d(p1.x, p1.y, p1.z) - R_ * Eigen::Vector3d(p2.x, p2.y, p2.z);
 
     R = (Mat_<double>(3, 3) <<
             R_ ( 0,0 ), R_ ( 0,1 ), R_ ( 0,2 ),
@@ -262,5 +280,5 @@ void bundleAdjustment(const vector<Point3f>& pts1, const vector<Point3f>& pts2, 
     
     cout << "optimization costs time: " << time_used.count() << " seconds." << endl;
     cout << "\nafter optimization: \n";
-    cout << "T = \n" << Eigen::Isometry3d(pose_estimate()).matrix() << endl;
+    cout << "T = \n" << Eigen::Isometry3d(pose->estimate()).matrix() << endl;
 }
