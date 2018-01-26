@@ -1,0 +1,21 @@
+cmake_minimum_required( VERSION 2.8 )
+project( directMethod )
+
+set( CMAKE_BUILD_TYPE Release)
+set( CMAKE_CXX_FLAGS "-std=c++11 -O3")
+
+list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules )
+
+set( LINK_DIR /usr/local/lib )
+link_directories( ${LINK_DIR} )
+
+find_package( OpenCV )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+find_package( G2O ) 
+include_directories( ${G2O_INCLUDE_DIRS} )
+
+include_directories( "/usr/local/Cellar/eigen/3.3.4/include/eigen3" )
+
+add_executable( direct_sparse direct_sparse.cpp )
+target_link_libraries(direct_sparse ${OpenCV_LIBS} g2o_core g2o_types_sba g2o_solver_csparse g2o_stuff g2o_csparse_extension )
