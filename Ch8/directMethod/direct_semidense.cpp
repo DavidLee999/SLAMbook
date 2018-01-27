@@ -13,7 +13,7 @@ using namespace std;
 #include <opencv2/features2d/features2d.hpp>
 
 #include <g2o/core/base_unary_edge.h>
-#include <g2o/core/block_slover.h>
+#include <g2o/core/block_solver.h>
 #include <g2o/core/optimization_algorithm_levenberg.h>
 #include <g2o/solvers/dense/linear_solver_dense.h>
 #include <g2o/core/robust_kernel.h>
@@ -22,7 +22,7 @@ using namespace g2o;
 
 struct Measurement
 {
-    Measurement(Eigen::Vector3d p, float g) : pos_word { p }, grayscale { g } {}
+    Measurement(Eigen::Vector3d p, float g) : pos_world { p }, grayscale { g } {}
 
     Eigen::Vector3d pos_world;
     float grayscale;
@@ -59,7 +59,7 @@ class EdgeSE3ProjectDirect: public BaseUnaryEdge<1, double, VertexSE3Expmap>
         virtual void computeError()
         {
             const VertexSE3Expmap* v = static_cast<const VertexSE3Expmap*>( _vertices[0]);
-            Eigen::Vector3d x_local = v->estiamte.map(x_world_);
+            Eigen::Vector3d x_local = v->estimate().map(x_world_);
 
             float x = x_local[0] * fx_ / x_local[2] + cx_;
             float y = x_local[1] * fy_ / x_local[2] + cy_;
@@ -89,8 +89,8 @@ class EdgeSE3ProjectDirect: public BaseUnaryEdge<1, double, VertexSE3Expmap>
             double invz = 1.0 / xyz_trans[2];
             double invz_2 = invz * invz;
 
-            float u = x * fx * invz + cx_;
-            float v = y * fy * invz + cy_;
+            float u = x * fx_ * invz + cx_;
+            float v = y * fy_ * invz + cy_;
 
             Eigen::Matrix<double, 2, 6> jacobian_uv_ksai;
 
@@ -117,10 +117,24 @@ class EdgeSE3ProjectDirect: public BaseUnaryEdge<1, double, VertexSE3Expmap>
         }
 
 
-        virtual bool read(std::ifstream& in) {}
-        virtual bool write(std::ofstream& out) const {}
+        virtual bool read(std::istream& in) {}
+        virtual bool write(std::ostream& out) const {}
 
     protected:
+        inline float getPixelValue(float x, float y)
+        {
+            uchar* data = &image_->data[int(y) * image_->step + int(x)];
+            float xx = x - floor(x);
+            float yy = y - floor(y);
+
+            return float(
+                    (1- xx) * (1 - yy) * data[0] +
+                    xx * (1 - yy) * data[1] + 
+                    (1 - xx) * yy * data[image_->step] + 
+                    xx * yy * data[image_->step + 1]);
+        }
+        
+    public:
         Eigen::Vector3d x_world_;
         float cx_ = 0, cy_ = 0, fx_ = 0, fy_ = 0;
         cv::Mat* image_ = nullptr;
@@ -128,4 +142,163 @@ class EdgeSE3ProjectDirect: public BaseUnaryEdge<1, double, VertexSE3Expmap>
 };
 
 
+int main(int argc, char** argv)
+{
+    if (argc != 2)
+    {
+        cout << "usage: direct_semidense path_to_dataset\n";
+        return 1;
+    }
 
+    srand((unsigned int) time(0));
+    string path_to_dataset = argv[1];
+    string associate_file = path_to_dataset + "/associate.txt";
+
+    ifstream fin(associate_file);
+
+    string rgb_file, depth_file, time_rgb, time_depth;
+    cv::Mat color, depth, gray;
+    vector<Measurement> measurements;
+
+    float cx = 325.5;
+    float cy = 253.5;
+    float fx = 518.0;
+    float fy = 519.0;
+    float depth_scale = 1000.0;
+
+    Eigen::Matrix3f K;
+    K << fx, 0.f, cx, 0.f, fy, cy, 0.f, 0.f, 1.0f;
+
+    Eigen::Isometry3d Tcw = Eigen::Isometry3d::Identity();
+
+    cv::Mat prev_color;
+    for (int index = 0; index < 10; index++)
+    {
+        cout << "************* loop " << index << "****************";
+
+        fin >> time_rgb >> rgb_file >> time_depth >> depth_file;
+        color = cv::imread(path_to_dataset + "/" + rgb_file);
+        depth = cv::imread(path_to_dataset + "/" + depth_file, -1);
+
+        if (color.data == nullptr || depth.data == nullptr)
+            continue;
+
+
+        cv::cvtColor(color, gray, cv::COLOR_BGR2GRAY);
+
+        if (index == 0)
+        {
+            for (int x = 10; x < gray.cols - 10; x++)
+                for (int y = 10; y < gray.rows - 10; y++)
+                {
+                    Eigen::Vector2d delta(
+                            gray.ptr<uchar>(y)[x + 1] - gray.ptr<uchar>(y)[x - 1],
+                            gray.ptr<uchar>(y + 1)[x] - gray.ptr<uchar>(y - 1)[x]);
+
+                    if (delta.norm() < 50)
+                        continue;
+
+                    ushort d = depth.ptr<ushort>(y)[x];
+                    if (d == 0)
+                        continue;
+
+                    Eigen::Vector3d p3d = project2Dto3D(x, y, d, fx, fy, cx, cy, depth_scale);
+
+                    float grayscale = float(gray.ptr<uchar>(y)[x]);
+
+                    measurements.push_back(Measurement(p3d, grayscale));
+                }
+
+            prev_color = color.clone();
+
+            cout << "add total " << measurements.size() << " measurements.\n";
+            continue;
+        }
+        
+        chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
+        poseEstimationDirect(measurements, &gray, K, Tcw);
+        chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+
+        chrono::duration<double> time_used = chrono::duration_cast<chrono::duration<double> >(t2 - t1);
+
+        cout << "direct method costs time: " << time_used.count() << " seconds\n";
+
+        cout << "Tcw = \n" << Tcw.matrix() << endl;
+
+        cv::Mat img_show(color.rows * 2, color.cols, CV_8UC3);
+        prev_color.copyTo(img_show(cv::Rect(0, 0 , color.cols, color.rows)));
+        color.copyTo(img_show(cv::Rect(0, color.rows, color.cols, color.rows)));
+
+        for (Measurement m : measurements)
+        {
+            if (rand() > RAND_MAX / 5)
+                continue;
+
+            Eigen::Vector3d p = m.pos_world;
+            Eigen::Vector2d pixel_prev = project3Dto2D(p(0, 0), p(1, 0), p(2, 0), fx, fy, cx, cy);
+
+            Eigen::Vector3d p2 = Tcw * m.pos_world;
+            Eigen::Vector2d pixel_now = project3Dto2D(p2(0, 0), p2(1, 0), p2(2, 0), fx, fy, cx, cy);
+
+            if (pixel_now(0, 0) < 0 || pixel_now(0, 0) >= color.cols || pixel_now(1, 0) < 0 || pixel_now(1, 0) >= color.rows)
+                continue;
+
+            float b = 0;
+            float g = 250;
+            float r = 0;
+
+            img_show.ptr<uchar>(pixel_prev(1, 0))[int(pixel_prev(0, 0)) * 3] = b;
+            img_show.ptr<uchar>(pixel_prev(1, 0))[int(pixel_prev(0, 0)) * 3 + 1] = g;
+            img_show.ptr<uchar>(pixel_prev(1, 0))[int(pixel_prev(0, 0)) * 3 + 2] = r;
+
+            img_show.ptr<uchar>(pixel_now(1, 0) + color.rows)[int(pixel_now(0, 0)) * 3] = b;
+            img_show.ptr<uchar>(pixel_now(1, 0) + color.rows)[int(pixel_now(0, 0)) * 3 + 1] = g;
+            img_show.ptr<uchar>(pixel_now(1, 0) + color.rows)[int(pixel_now(0, 0)) * 3 + 2] = r;
+
+            cv::circle(img_show, cv::Point2d(pixel_prev(0, 0), pixel_prev(1, 0)), 4, cv::Scalar(b, g, r), 2);
+            cv::circle(img_show, cv::Point2d(pixel_now(0, 0), pixel_now(1, 0) + color.rows), 4, cv::Scalar(b, g, r), 2);
+        }
+
+        cv::imshow("result", img_show);
+        cv::waitKey(0);
+    }
+
+    return 0;
+}
+
+bool poseEstimationDirect(const vector<Measurement>& measuremnts, cv::Mat* gray, Eigen::Matrix3f& K, Eigen::Isometry3d& Tcw)
+{
+    typedef g2o::BlockSolver<g2o::BlockSolverTraits<6, 1> > DirectBlock;
+
+    DirectBlock::LinearSolverType* linearSolver = new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>();
+
+    DirectBlock* solver_ptr = new DirectBlock(linearSolver);
+
+    g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr);
+    g2o::SparseOptimizer optimizer;
+    optimizer.setAlgorithm(solver);
+    optimizer.setVerbose(true);
+
+    g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();
+    pose->setEstimate(g2o::SE3Quat(Tcw.rotation(), Tcw.translation()));
+    pose->setId(0);
+
+    optimizer.addVertex(pose);
+
+    int id = 1;
+    for (Measurement m : measuremnts)
+    {
+        EdgeSE3ProjectDirect* edge = new EdgeSE3ProjectDirect(m.pos_world, K(0, 0), K(1, 1), K(0, 2), K(1, 2), gray);
+
+        edge->setVertex(0, pose);
+        edge->setMeasurement(m.grayscale);
+        edge->setInformation(Eigen::Matrix<double, 1, 1>::Identity());
+        edge->setId(id++);
+        optimizer.addEdge(edge);
+    }
+
+    cout << "edges in graph: " << optimizer.edges().size() << endl;
+    optimizer.initializeOptimization();
+    optimizer.optimize(30);
+    Tcw = pose->estimate();
+}
