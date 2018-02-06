@@ -5,3 +5,4 @@
 /Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir
 /Users/lipenghua/GitHub/SLAMbook/Ch9/build/test/CMakeFiles/rebuild_cache.dir
 /Users/lipenghua/GitHub/SLAMbook/Ch9/build/test/CMakeFiles/edit_cache.dir
+/Users/lipenghua/GitHub/SLAMbook/Ch9/build/test/CMakeFiles/run_vo.dir

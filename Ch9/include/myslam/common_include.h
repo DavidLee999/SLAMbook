@@ -10,6 +10,7 @@ using Eigen::Vector3d;
 #include <sophus/se3.h>
 
 using Sophus::SE3;
+using Sophus::SO3;
 
 #include <opencv2/core/core.hpp>
 

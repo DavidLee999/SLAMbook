@@ -110,6 +110,48 @@ depend:
 	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+# Convenience name for target.
+test/CMakeFiles/run_vo.dir/rule:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/run_vo.dir/rule
+.PHONY : test/CMakeFiles/run_vo.dir/rule
+
+# Convenience name for target.
+run_vo: test/CMakeFiles/run_vo.dir/rule
+
+.PHONY : run_vo
+
+# fast build rule for target.
+run_vo/fast:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/build
+.PHONY : run_vo/fast
+
+run_vo.o: run_vo.cpp.o
+
+.PHONY : run_vo.o
+
+# target to build an object file
+run_vo.cpp.o:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.o
+.PHONY : run_vo.cpp.o
+
+run_vo.i: run_vo.cpp.i
+
+.PHONY : run_vo.i
+
+# target to preprocess a source file
+run_vo.cpp.i:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.i
+.PHONY : run_vo.cpp.i
+
+run_vo.s: run_vo.cpp.s
+
+.PHONY : run_vo.s
+
+# target to generate assembly for a file
+run_vo.cpp.s:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.s
+.PHONY : run_vo.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -118,6 +160,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... run_vo"
+	@echo "... run_vo.o"
+	@echo "... run_vo.i"
+	@echo "... run_vo.s"
 .PHONY : help
 
 

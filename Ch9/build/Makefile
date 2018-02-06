@@ -123,6 +123,19 @@ myslam/fast:
 	$(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/build
 .PHONY : myslam/fast
 
+#=============================================================================
+# Target rules for targets named run_vo
+
+# Build rule for target.
+run_vo: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 run_vo
+.PHONY : run_vo
+
+# fast build rule for target.
+run_vo/fast:
+	$(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/build
+.PHONY : run_vo/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -132,6 +145,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... myslam"
+	@echo "... run_vo"
 .PHONY : help
 
 

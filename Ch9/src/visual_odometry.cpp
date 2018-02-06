@@ -20,6 +20,7 @@ namespace myslam
         min_inliers_ = Config::get<int>("min_inliers");
         key_frame_min_rot = Config::get<double>("keyframe_rotation");
         key_frame_min_trans = Config::get<double>("keyframe_translation");
+
         orb_ = cv::OBR::create(num_of_features_, scale_factor_, level_pyramid_);
     }
 
@@ -115,6 +116,88 @@ namespace myslam
         }
 
         cout << "good matches: " << feature_matches_.size() << endl;
+    }
+
+    void VisualOdometry::setRef3DPoints()
+    {
+        pts_3d_ref_.clear();
+        descriptors_ref_ = Mat();
+
+        for (size_t i = 0; i < keypoints_curr_.size(); i++)
+        {
+            double d = ref_->findDepth(keypoints_curr_[i]);
+
+            if (d > 0)
+            {
+                Vector3d p_cam = ref_->camera_->pixel2camera(Vector2d(keypoints_curr_[i].pt.x, keypoints_curr_[i].pt.y), d);
+
+                pts_3d_ref_.push_back(cv::Point3f(p_cam(0, 0), p_cam(1, 0), p_cam(2, 0)));
+
+                descriptors_ref_.push_back(descriptors_curr_.row(i));
+            }
+        }
+    }
+
+    void VisualOdometry::poseEstimationPnP()
+    {
+        vector<cv::Point3f> pts3d;
+        vector<cv::Point2f> pts2d;
+
+        for (cv::DMatch m : feature_matches_)
+        {
+            pts3d.push_back(pts_3d_ref_[m.queryIdx]);
+            pts2d.push_back(keypoints_curr_[m.trainIdx].pt);
+        }
+
+        Mat K = (cv::Mat_<double>(3, 3) <<
+                ref_->camera_->fx_, 0, ref_->camera_->cx_,
+                0, ref_->camera_->fy_, ref_->camera_->cy_,
+                0, 0, 1);
+
+        Mat rvec, tvec, inliers;
+        cv::solvePnPRansac(pts3d, pts2d, K, Mat(), rvec, tvec, false, 100, 4.0, 0.99, inliers);
+
+        num_inliers_ = inliers.rows;
+        cout << "pnp inliers: " << num_inliers_ << endl;
+
+        T_c_r_estimated_ = SE3(
+                SO3(rvec.at<double>(0, 0), rvec.at<double>(1, 0), rvec.at<double>(2, 0)), Vector3d(tvec.at<double(0, 0), tvec.at<double>(1, 0), tvec.at<double>(2, 0)));
+    }
+
+    bool VisualOdometry::checkEstimatedPose()
+    {
+        if (num_inliers_ < min_inliers_)
+        {
+            cout << "reject because inlier is too small: " << num_inliers_ << endl;
+            return false;
+        }
+
+        Sophus::Vector6d d = T_c_r_estimated_.log();
+        if (d.norm() > 5.0)
+        {
+            cout << "reject because motion is too large: " << d.norm() << endl;
+            return false;
+        }
+
+        return true;
+    }
+
+    bool VisualOdometry::checkKeyFrame()
+    {
+        Sophus::Vector6d d = T_c_r_estimated_.log();
+        Vector3d trans = d.head<3>();
+        Vector3d rot = d.tail<3>();
+
+        if (rot.norm() > key_frame_min_rot || trans.norm() >?  key_frame_min_trans)
+            return true;
+
+        return false;
+    }
+
+    vlid VisualOdometry::addKeyFrame()
+    {
+        cout << "adding a key-frame\n";
+        map_->insertKeyFrame(curr_);
     }
 
 }

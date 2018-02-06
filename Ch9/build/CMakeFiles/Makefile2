@@ -118,12 +118,12 @@ clean: src/CMakeFiles/myslam.dir/clean
 # Directory level rules for directory test
 
 # Convenience name for "all" pass in the directory.
-test/all:
+test/all: test/CMakeFiles/run_vo.dir/all
 
 .PHONY : test/all
 
 # Convenience name for "clean" pass in the directory.
-test/clean:
+test/clean: test/CMakeFiles/run_vo.dir/clean
 
 .PHONY : test/clean
 
@@ -131,6 +131,43 @@ test/clean:
 test/preinstall:
 
 .PHONY : test/preinstall
+
+#=============================================================================
+# Target rules for target test/CMakeFiles/run_vo.dir
+
+# All Build rule for target.
+test/CMakeFiles/run_vo.dir/all: src/CMakeFiles/myslam.dir/all
+	$(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/depend
+	$(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/lipenghua/GitHub/SLAMbook/Ch9/build/CMakeFiles --progress-num=7,8 "Built target run_vo"
+.PHONY : test/CMakeFiles/run_vo.dir/all
+
+# Include target in all.
+all: test/CMakeFiles/run_vo.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+test/CMakeFiles/run_vo.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/lipenghua/GitHub/SLAMbook/Ch9/build/CMakeFiles 8
+	$(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/run_vo.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/lipenghua/GitHub/SLAMbook/Ch9/build/CMakeFiles 0
+.PHONY : test/CMakeFiles/run_vo.dir/rule
+
+# Convenience name for target.
+run_vo: test/CMakeFiles/run_vo.dir/rule
+
+.PHONY : run_vo
+
+# clean rule for target.
+test/CMakeFiles/run_vo.dir/clean:
+	$(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/clean
+.PHONY : test/CMakeFiles/run_vo.dir/clean
+
+# clean rule for target.
+clean: test/CMakeFiles/run_vo.dir/clean
+
+.PHONY : clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
