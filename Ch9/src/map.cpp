@@ -1,4 +1,4 @@
-#include "myslam/map"
+#include "myslam/map.h"
 
 namespace myslam
 {
@@ -20,7 +20,7 @@ namespace myslam
     {
         if (map_points_.find(map_point->id_) == map_points_.end())
         {
-            map_points_.insert(mapke_pair(map_point->id_, map_point));
+            map_points_.insert(make_pair(map_point->id_, map_point));
         }
         else
         {

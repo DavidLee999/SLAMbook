@@ -1,5 +1,5 @@
-#ifndef GONFIG_H
-#define GONFIG_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include "myslam/common_include.h"
 

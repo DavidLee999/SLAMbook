@@ -2,9 +2,9 @@
 
 namespace myslam
 {
-    Frame::Frame() : id_ { -1 }, time_stamp_ { -1 }, camera_ { nullptr } {}
+    Frame::Frame() : id_ ( -1 ), time_stamp_ { -1 }, camera_ { nullptr } {}
 
-    Frame::Frame(long id, double time_stamp, SE3 T_c_w, Camera::Ptr camera, Mat color, Mat depth) : id_ { id }, time_stamp_ { time_stamp }, T_c_w_ { T_c_w }, camera_ { camera }, color_ { color }, dept_ { depth } {}
+    Frame::Frame(long id, double time_stamp, SE3 T_c_w, Camera::Ptr camera, Mat color, Mat depth) : id_ ( id ), time_stamp_ { time_stamp }, T_c_w_ { T_c_w }, camera_ { camera }, color_ { color }, depth_ { depth } {}
     
     Frame::~Frame() {}
 
@@ -49,7 +49,7 @@ namespace myslam
         if (p_cam(2, 0) < 0)
             return false;
 
-        Vector2d pixel = camera_->wold2pixel(pt_world, T_c_w_);
+        Vector2d pixel = camera_->world2pixel(pt_world, T_c_w_);
         return pixel(0, 0) > 0 && pixel(1, 0) > 0
             && pixel(0, 0) < color_.cols
             && pixel(1, 0) < color_.rows;
