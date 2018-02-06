@@ -260,6 +260,33 @@ mappoint.cpp.s:
 	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/mappoint.cpp.s
 .PHONY : mappoint.cpp.s
 
+visual_odometry.o: visual_odometry.cpp.o
+
+.PHONY : visual_odometry.o
+
+# target to build an object file
+visual_odometry.cpp.o:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.o
+.PHONY : visual_odometry.cpp.o
+
+visual_odometry.i: visual_odometry.cpp.i
+
+.PHONY : visual_odometry.i
+
+# target to preprocess a source file
+visual_odometry.cpp.i:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.i
+.PHONY : visual_odometry.cpp.i
+
+visual_odometry.s: visual_odometry.cpp.s
+
+.PHONY : visual_odometry.s
+
+# target to generate assembly for a file
+visual_odometry.cpp.s:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.s
+.PHONY : visual_odometry.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -284,6 +311,9 @@ help:
 	@echo "... mappoint.o"
 	@echo "... mappoint.i"
 	@echo "... mappoint.s"
+	@echo "... visual_odometry.o"
+	@echo "... visual_odometry.i"
+	@echo "... visual_odometry.s"
 .PHONY : help
 
 

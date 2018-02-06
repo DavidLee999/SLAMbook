@@ -56,6 +56,14 @@ myslam/mappoint.h
 
 ../include/myslam/mappoint.h
 
+../include/myslam/visual_odometry.h
+myslam/common_include.h
+../include/myslam/myslam/common_include.h
+myslam/map.h
+../include/myslam/myslam/map.h
+opencv2/features2d/features2d.hpp
+-
+
 /Users/lipenghua/GitHub/SLAMbook/Ch9/src/camera.cpp
 myslam/camera.h
 /Users/lipenghua/GitHub/SLAMbook/Ch9/src/myslam/camera.h
@@ -77,6 +85,22 @@ myslam/common_include.h
 /Users/lipenghua/GitHub/SLAMbook/Ch9/src/myslam/common_include.h
 myslam/mappoint.h
 /Users/lipenghua/GitHub/SLAMbook/Ch9/src/myslam/mappoint.h
+
+/Users/lipenghua/GitHub/SLAMbook/Ch9/src/visual_odometry.cpp
+opencv2/highgui/highgui.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+opencv2/calib3d/calib3d.hpp
+-
+algorithm
+-
+boost/timer.hpp
+-
+myslam/config.h
+/Users/lipenghua/GitHub/SLAMbook/Ch9/src/myslam/config.h
+myslam/visual_odometry.h
+/Users/lipenghua/GitHub/SLAMbook/Ch9/src/myslam/visual_odometry.h
 
 /Users/lipenghua/Sophus/sophus/se3.h
 so3.h
@@ -1812,6 +1836,14 @@ boost/exception/exception.hpp
 boost/current_function.hpp
 -
 
+/usr/local/include/boost/timer.hpp
+boost/config.hpp
+-
+ctime
+-
+boost/limits.hpp
+-
+
 /usr/local/include/boost/utility/addressof.hpp
 boost/core/addressof.hpp
 -
@@ -1829,6 +1861,10 @@ opencv2/core/affine.hpp
 /usr/local/include/opencv2/opencv2/core/affine.hpp
 opencv2/calib3d/calib3d_c.h
 /usr/local/include/opencv2/opencv2/calib3d/calib3d_c.h
+
+/usr/local/include/opencv2/calib3d/calib3d.hpp
+opencv2/calib3d.hpp
+/usr/local/include/opencv2/calib3d/opencv2/calib3d.hpp
 
 /usr/local/include/opencv2/calib3d/calib3d_c.h
 opencv2/core/core_c.h
@@ -2159,6 +2195,10 @@ opencv2/core.hpp
 /usr/local/include/opencv2/opencv2/core.hpp
 opencv2/flann/miniflann.hpp
 /usr/local/include/opencv2/opencv2/flann/miniflann.hpp
+
+/usr/local/include/opencv2/features2d/features2d.hpp
+opencv2/features2d.hpp
+/usr/local/include/opencv2/features2d/opencv2/features2d.hpp
 
 /usr/local/include/opencv2/flann.hpp
 opencv2/core.hpp
@@ -2596,6 +2636,10 @@ opencv2/videoio.hpp
 opencv2/highgui/highgui_c.h
 /usr/local/include/opencv2/opencv2/highgui/highgui_c.h
 
+/usr/local/include/opencv2/highgui/highgui.hpp
+opencv2/highgui.hpp
+/usr/local/include/opencv2/highgui/opencv2/highgui.hpp
+
 /usr/local/include/opencv2/highgui/highgui_c.h
 opencv2/core/core_c.h
 /usr/local/include/opencv2/highgui/opencv2/core/core_c.h
@@ -2649,6 +2693,10 @@ opencv2/highgui.hpp
 /usr/local/include/opencv2/opencv2/highgui.hpp
 opencv2/imgproc/imgproc_c.h
 /usr/local/include/opencv2/opencv2/imgproc/imgproc_c.h
+
+/usr/local/include/opencv2/imgproc/imgproc.hpp
+opencv2/imgproc.hpp
+/usr/local/include/opencv2/imgproc/opencv2/imgproc.hpp
 
 /usr/local/include/opencv2/imgproc/imgproc_c.h
 opencv2/imgproc/types_c.h

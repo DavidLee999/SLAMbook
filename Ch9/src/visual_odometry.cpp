@@ -6,7 +6,7 @@
 #include <boost/timer.hpp>
 
 #include "myslam/config.h"
-#inlcude "myslam/visual_odometry.h"
+#include "myslam/visual_odometry.h"
 
 namespace myslam
 {
@@ -21,7 +21,7 @@ namespace myslam
         key_frame_min_rot = Config::get<double>("keyframe_rotation");
         key_frame_min_trans = Config::get<double>("keyframe_translation");
 
-        orb_ = cv::OBR::create(num_of_features_, scale_factor_, level_pyramid_);
+        orb_ = cv::ORB::create(num_of_features_, scale_factor_, level_pyramid_);
     }
 
     VisualOdometry::~VisualOdometry() {}
@@ -61,7 +61,7 @@ namespace myslam
 
                         num_lost_ = 0;
 
-                        if (checkKeyFrame() = true)
+                        if (checkKeyFrame() == true)
                         {
                             addKeyFrame();
                         }
@@ -93,23 +93,23 @@ namespace myslam
     { orb_->detect(curr_->color_, keypoints_curr_); }
 
     void VisualOdometry::computeDescriptors()
-    { orb_->compute(curr_->color_, keypoints_cur_, descriptors_curr_); }
+    { orb_->compute(curr_->color_, keypoints_curr_, descriptors_curr_); }
 
     void VisualOdometry::featureMatching()
     {
         vector<cv::DMatch> matches;
-        cv::BFMathcer matcher(cv::NORM_HAMMING);
+        cv::BFMatcher matcher(cv::NORM_HAMMING);
         matcher.match(descriptors_ref_, descriptors_curr_, matches);
 
         float min_dis = std::min_element(matches.begin(), matches.end(),
                 [](const cv::DMatch& m1, const cv::DMatch& m2)
-                { return m1.distance < m2.distance; });
+                { return m1.distance < m2.distance; })->distance;
 
         feature_matches_.clear();
 
-        for (cv::DMatch& m : mathces)
+        for (cv::DMatch& m : matches)
         {
-            if (m.distance < max<float>(min_dis * match_rotio_, 30.0))
+            if (m.distance < max<float>(min_dis * match_ratio_, 30.0))
             {
                 feature_matches_.push_back(m);
             }
@@ -161,7 +161,7 @@ namespace myslam
         cout << "pnp inliers: " << num_inliers_ << endl;
 
         T_c_r_estimated_ = SE3(
-                SO3(rvec.at<double>(0, 0), rvec.at<double>(1, 0), rvec.at<double>(2, 0)), Vector3d(tvec.at<double(0, 0), tvec.at<double>(1, 0), tvec.at<double>(2, 0)));
+                SO3(rvec.at<double>(0, 0), rvec.at<double>(1, 0), rvec.at<double>(2, 0)), Vector3d(tvec.at<double>(0, 0), tvec.at<double>(1, 0), tvec.at<double>(2, 0)));
     }
 
     bool VisualOdometry::checkEstimatedPose()
@@ -188,13 +188,13 @@ namespace myslam
         Vector3d trans = d.head<3>();
         Vector3d rot = d.tail<3>();
 
-        if (rot.norm() > key_frame_min_rot || trans.norm() >?  key_frame_min_trans)
+        if (rot.norm() > key_frame_min_rot || trans.norm() > key_frame_min_trans)
             return true;
 
         return false;
     }
 
-    vlid VisualOdometry::addKeyFrame()
+    void VisualOdometry::addKeyFrame()
     {
         cout << "adding a key-frame\n";
         map_->insertKeyFrame(curr_);
