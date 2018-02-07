@@ -4,6 +4,7 @@
 src/CMakeFiles/myslam.dir/camera.cpp.o
  ../include/myslam/camera.h
  ../include/myslam/common_include.h
+ ../include/myslam/config.h
  /Users/lipenghua/GitHub/SLAMbook/Ch9/src/camera.cpp
  /Users/lipenghua/Sophus/sophus/se3.h
  /Users/lipenghua/Sophus/sophus/so3.h

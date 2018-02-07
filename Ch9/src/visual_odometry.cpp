@@ -3,6 +3,7 @@
 #include <opencv2/calib3d/calib3d.hpp>
 
 #include <algorithm>
+
 #include <boost/timer.hpp>
 
 #include "myslam/config.h"
@@ -36,6 +37,7 @@ namespace myslam
                     curr_ = ref_ = frame;
 
                     map_->insertKeyFrame(frame);
+
                     extractKeyPoints();
                     computeDescriptors();
 

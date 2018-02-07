@@ -3,6 +3,7 @@
 
 src/CMakeFiles/myslam.dir/camera.cpp.o: ../include/myslam/camera.h
 src/CMakeFiles/myslam.dir/camera.cpp.o: ../include/myslam/common_include.h
+src/CMakeFiles/myslam.dir/camera.cpp.o: ../include/myslam/config.h
 src/CMakeFiles/myslam.dir/camera.cpp.o: ../src/camera.cpp
 src/CMakeFiles/myslam.dir/camera.cpp.o: /Users/lipenghua/Sophus/sophus/se3.h
 src/CMakeFiles/myslam.dir/camera.cpp.o: /Users/lipenghua/Sophus/sophus/so3.h

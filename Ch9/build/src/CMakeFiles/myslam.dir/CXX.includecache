@@ -67,6 +67,8 @@ opencv2/features2d/features2d.hpp
 /Users/lipenghua/GitHub/SLAMbook/Ch9/src/camera.cpp
 myslam/camera.h
 /Users/lipenghua/GitHub/SLAMbook/Ch9/src/myslam/camera.h
+myslam/config.h
+/Users/lipenghua/GitHub/SLAMbook/Ch9/src/myslam/config.h
 
 /Users/lipenghua/GitHub/SLAMbook/Ch9/src/config.cpp
 myslam/config.h

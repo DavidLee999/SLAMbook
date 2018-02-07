@@ -2,6 +2,7 @@
 # data
 # the tum dataset directory, change it to yours! 
 dataset_dir: /Users/lipenghua/Doc/developer/slambook-master/project/0.2/rgbd_dataset_freiburg1_xyz
+
 # camera intrinsics
 # fr1
 camera.fx: 517.3
@@ -11,6 +12,7 @@ camera.cy: 249.7
 
 camera.depth_scale: 5000
 
+# VO paras
 number_of_features: 500
 scale_factor: 1.2
 level_pyramid: 8
