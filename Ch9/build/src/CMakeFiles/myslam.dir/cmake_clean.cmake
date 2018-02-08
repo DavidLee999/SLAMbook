@@ -5,6 +5,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/myslam.dir/camera.cpp.o"
   "CMakeFiles/myslam.dir/config.cpp.o"
   "CMakeFiles/myslam.dir/visual_odometry.cpp.o"
+  "CMakeFiles/myslam.dir/g2o_types.cpp.o"
   "../../lib/libmyslam.pdb"
   "../../lib/libmyslam.dylib"
 )

@@ -2,7 +2,7 @@
 
 namespace myslam
 {
-    void EdgeProjectXYZRGBD::computerError()
+    void EdgeProjectXYZRGBD::computeError()
     {
         const g2o::VertexSBAPointXYZ* point = static_cast<const g2o::VertexSBAPointXYZ*>(_vertices[0]);
         const g2o::VertexSE3Expmap* pose = static_cast<const g2o::VertexSE3Expmap*>(_vertices[1]);
@@ -11,7 +11,7 @@ namespace myslam
 
     void EdgeProjectXYZRGBD::linearizeOplus()
     {
-        g2o::VertexSE3Expmap* pose = static_case<g2o::VertexSE3Expmap*>(_vertices[1]);
+        g2o::VertexSE3Expmap* pose = static_cast<g2o::VertexSE3Expmap*>(_vertices[1]);
         g2o::SE3Quat T(pose->estimate());
 
         g2o::VertexSBAPointXYZ* point = static_cast<g2o::VertexSBAPointXYZ*>(_vertices[0]);
@@ -45,7 +45,7 @@ namespace myslam
         _jacobianOplusXj(2, 5) = -1;
     }
 
-    void EdgeProjectXYZRGBDPoseOnly::computerError()
+    void EdgeProjectXYZRGBDPoseOnly::computeError()
     {
         const g2o::VertexSE3Expmap* pose = static_cast<const g2o::VertexSE3Expmap*>(_vertices[0]);
 
@@ -54,7 +54,7 @@ namespace myslam
 
     void EdgeProjectXYZRGBDPoseOnly::linearizeOplus()
     {
-        g2o::VertexSE3Expmap* pose = static_case<g2o::VertexSE3Expmap*>(_vertices[0]);
+        g2o::VertexSE3Expmap* pose = static_cast<g2o::VertexSE3Expmap*>(_vertices[0]);
         g2o::SE3Quat T(pose->estimate());
 
         Vector3d xyz_trans = T.map(point_);
@@ -85,7 +85,7 @@ namespace myslam
         _jacobianOplusXi(2, 5) = -1;
     }
 
-    void EdgeProjectXYZ2UVPoseOnly::computerError()
+    void EdgeProjectXYZ2UVPoseOnly::computeError()
     {
         const g2o::VertexSE3Expmap* pose = static_cast<const g2o::VertexSE3Expmap*>(_vertices[0]);
 

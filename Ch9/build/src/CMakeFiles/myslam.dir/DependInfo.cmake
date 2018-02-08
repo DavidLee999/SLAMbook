@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/lipenghua/GitHub/SLAMbook/Ch9/src/camera.cpp" "/Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir/camera.cpp.o"
   "/Users/lipenghua/GitHub/SLAMbook/Ch9/src/config.cpp" "/Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir/config.cpp.o"
   "/Users/lipenghua/GitHub/SLAMbook/Ch9/src/frame.cpp" "/Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir/frame.cpp.o"
+  "/Users/lipenghua/GitHub/SLAMbook/Ch9/src/g2o_types.cpp" "/Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir/g2o_types.cpp.o"
   "/Users/lipenghua/GitHub/SLAMbook/Ch9/src/map.cpp" "/Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir/map.cpp.o"
   "/Users/lipenghua/GitHub/SLAMbook/Ch9/src/mappoint.cpp" "/Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir/mappoint.cpp.o"
   "/Users/lipenghua/GitHub/SLAMbook/Ch9/src/visual_odometry.cpp" "/Users/lipenghua/GitHub/SLAMbook/Ch9/build/src/CMakeFiles/myslam.dir/visual_odometry.cpp.o"

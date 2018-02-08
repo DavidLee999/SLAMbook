@@ -30,6 +30,7 @@ namespace myslam
             Mat descriptors_curr_;
             Mat descriptors_ref_;
             vector<cv::DMatch> feature_matches_;
+            cv::FlannBasedMatcher matcher_flann_;
 
             SE3 T_c_r_estimated_;
             int num_inliers_;
@@ -41,9 +42,9 @@ namespace myslam
             float match_ratio_;
             int max_num_lost_;
             int min_inliers_;
-
             double key_frame_min_rot;
             double key_frame_min_trans;
+            double map_point_erase_ratio_;
 
         public:
             VisualOdometry();

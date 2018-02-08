@@ -137,6 +137,7 @@ run_vo_EXTERNAL_OBJECTS =
 ../bin/run_vo: /usr/local/lib/libopencv_imgproc.3.4.0.dylib
 ../bin/run_vo: /usr/local/lib/libopencv_core.3.4.0.dylib
 ../bin/run_vo: /Users/lipenghua/Sophus/build/libSophus.dylib
+../bin/run_vo: /usr/local/lib/libcxsparse.dylib
 ../bin/run_vo: test/CMakeFiles/run_vo.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/lipenghua/GitHub/SLAMbook/Ch9/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../../bin/run_vo"
 	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build/test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/run_vo.dir/link.txt --verbose=$(VERBOSE)

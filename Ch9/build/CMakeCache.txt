@@ -179,6 +179,12 @@ CMAKE_STRIP:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/Xcode
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to a file.
+CSPARSE_INCLUDE_DIR:PATH=/usr/local/include
+
+//Path to a library.
+CSPARSE_LIBRARY:FILEPATH=/usr/local/lib/libcxsparse.dylib
+
 //Path to a library.
 G2O_CLI_LIBRARY:FILEPATH=/usr/local/lib/libg2o_cli.dylib
 
@@ -300,7 +306,7 @@ Sophus_DIR:PATH=/Users/lipenghua/Sophus/build
 myslam_BINARY_DIR:STATIC=/Users/lipenghua/GitHub/SLAMbook/Ch9/build
 
 //Dependencies for the target
-myslam_LIB_DEPENDS:STATIC=general;opencv_calib3d;general;opencv_core;general;opencv_dnn;general;opencv_features2d;general;opencv_flann;general;opencv_highgui;general;opencv_imgcodecs;general;opencv_imgproc;general;opencv_ml;general;opencv_objdetect;general;opencv_photo;general;opencv_shape;general;opencv_stitching;general;opencv_superres;general;opencv_video;general;opencv_videoio;general;opencv_videostab;general;opencv_viz;general;opencv_aruco;general;opencv_bgsegm;general;opencv_bioinspired;general;opencv_ccalib;general;opencv_datasets;general;opencv_dpm;general;opencv_face;general;opencv_fuzzy;general;opencv_hdf;general;opencv_img_hash;general;opencv_line_descriptor;general;opencv_optflow;general;opencv_phase_unwrapping;general;opencv_plot;general;opencv_reg;general;opencv_rgbd;general;opencv_saliency;general;opencv_sfm;general;opencv_stereo;general;opencv_structured_light;general;opencv_surface_matching;general;opencv_text;general;opencv_tracking;general;opencv_xfeatures2d;general;opencv_ximgproc;general;opencv_xobjdetect;general;opencv_xphoto;general;/Users/lipenghua/Sophus/build/libSophus.dylib;general;g2o_core;general;g2o_stuff;general;g2o_types_sba;
+myslam_LIB_DEPENDS:STATIC=general;opencv_calib3d;general;opencv_core;general;opencv_dnn;general;opencv_features2d;general;opencv_flann;general;opencv_highgui;general;opencv_imgcodecs;general;opencv_imgproc;general;opencv_ml;general;opencv_objdetect;general;opencv_photo;general;opencv_shape;general;opencv_stitching;general;opencv_superres;general;opencv_video;general;opencv_videoio;general;opencv_videostab;general;opencv_viz;general;opencv_aruco;general;opencv_bgsegm;general;opencv_bioinspired;general;opencv_ccalib;general;opencv_datasets;general;opencv_dpm;general;opencv_face;general;opencv_fuzzy;general;opencv_hdf;general;opencv_img_hash;general;opencv_line_descriptor;general;opencv_optflow;general;opencv_phase_unwrapping;general;opencv_plot;general;opencv_reg;general;opencv_rgbd;general;opencv_saliency;general;opencv_sfm;general;opencv_stereo;general;opencv_structured_light;general;opencv_surface_matching;general;opencv_text;general;opencv_tracking;general;opencv_xfeatures2d;general;opencv_ximgproc;general;opencv_xobjdetect;general;opencv_xphoto;general;/Users/lipenghua/Sophus/build/libSophus.dylib;general;/usr/local/lib/libcxsparse.dylib;general;g2o_core;general;g2o_stuff;general;g2o_types_sba;general;g2o_csparse_extension;
 
 //Value Computed by CMake
 myslam_SOURCE_DIR:STATIC=/Users/lipenghua/GitHub/SLAMbook/Ch9
@@ -439,6 +445,8 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding CSPARSE
+FIND_PACKAGE_MESSAGE_DETAILS_CSPARSE:INTERNAL=[/usr/local/include][/usr/local/lib/libcxsparse.dylib][v()]
 //Details about finding OpenCV
 FIND_PACKAGE_MESSAGE_DETAILS_OpenCV:INTERNAL=[/usr/local][v3.4.0()]
 

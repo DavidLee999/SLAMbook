@@ -206,6 +206,33 @@ frame.cpp.s:
 	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/frame.cpp.s
 .PHONY : frame.cpp.s
 
+g2o_types.o: g2o_types.cpp.o
+
+.PHONY : g2o_types.o
+
+# target to build an object file
+g2o_types.cpp.o:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/g2o_types.cpp.o
+.PHONY : g2o_types.cpp.o
+
+g2o_types.i: g2o_types.cpp.i
+
+.PHONY : g2o_types.i
+
+# target to preprocess a source file
+g2o_types.cpp.i:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/g2o_types.cpp.i
+.PHONY : g2o_types.cpp.i
+
+g2o_types.s: g2o_types.cpp.s
+
+.PHONY : g2o_types.s
+
+# target to generate assembly for a file
+g2o_types.cpp.s:
+	cd /Users/lipenghua/GitHub/SLAMbook/Ch9/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/g2o_types.cpp.s
+.PHONY : g2o_types.cpp.s
+
 map.o: map.cpp.o
 
 .PHONY : map.o
@@ -305,6 +332,9 @@ help:
 	@echo "... frame.o"
 	@echo "... frame.i"
 	@echo "... frame.s"
+	@echo "... g2o_types.o"
+	@echo "... g2o_types.i"
+	@echo "... g2o_types.s"
 	@echo "... map.o"
 	@echo "... map.i"
 	@echo "... map.s"

@@ -11,6 +11,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.10.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.10.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.10.1/CMakeSystem.cmake"
+  "../cmake_modules/FindCSparse.cmake"
   "../cmake_modules/FindG2O.cmake"
   "../src/CMakeLists.txt"
   "../test/CMakeLists.txt"
