@@ -5,6 +5,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/viz.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "myslam/config.h"
 #include "myslam/visual_odometry.h"
@@ -82,14 +83,22 @@ int main(int argc, char** argv)
         if (vo->state_ == myslam::VisualOdometry::LOST)
             break;
 
-        SE3 Tcw = pFrame->T_c_w_.inverse();
+        SE3 Twc = pFrame->T_c_w_.inverse();
 
         cv::Affine3d M(cv::Affine3d::Mat3(
-                    Tcw.rotation_matrix()(0,0), Tcw.rotation_matrix()(0,1), Tcw.rotation_matrix()(0,2),
-                    Tcw.rotation_matrix()(1,0), Tcw.rotation_matrix()(1,1), Tcw.rotation_matrix()(1,2),
-                    Tcw.rotation_matrix()(2,0), Tcw.rotation_matrix()(2,1), Tcw.rotation_matrix()(2,2)), 
-                cv::Affine3d::Vec3(Tcw.translation()(0,0), Tcw.translation()(1,0), Tcw.translation()(2,0))
+                    Twc.rotation_matrix()(0,0), Twc.rotation_matrix()(0,1), Twc.rotation_matrix()(0,2),
+                    Twc.rotation_matrix()(1,0), Twc.rotation_matrix()(1,1), Twc.rotation_matrix()(1,2),
+                    Twc.rotation_matrix()(2,0), Twc.rotation_matrix()(2,1), Twc.rotation_matrix()(2,2)), 
+                cv::Affine3d::Vec3(Twc.translation()(0,0), Twc.translation()(1,0), Twc.translation()(2,0))
         );
+         Mat img_show = color.clone();
+         for (auto& pt : vo->map_->map_points_)
+         {
+             myslam::MapPoint::Ptr p = pt.second;
+             Vector2d pixel = pFrame->camera_->world2pixel(p->pos_, pFrame->T_c_w_);
+
+             cv::circle(img_show, cv::Point2f(pixel(0, 0), pixel(1, 0)), 5, cv::Scalar(0, 255, 0), 2);
+         }
 
         cv::imshow("image", color);
         cv::waitKey(1);

@@ -18,6 +18,7 @@ namespace myslam
             SE3 T_c_w_;
             Camera::Ptr camera_;
             Mat color_, depth_;
+            bool is_key_frame_;
 
         public:
             Frame();
@@ -30,6 +31,8 @@ namespace myslam
             double findDepth(const cv::KeyPoint& kp);
 
             Vector3d getCamCenter() const;
+
+            void setPose(const SE3& T_c_w);
 
             bool isInFrame(const Vector3d& pt_world);
     };
