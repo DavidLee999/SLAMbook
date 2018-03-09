@@ -97,3 +97,209 @@ BALProblem::BALProblem(const std::string& filename, bool use_quaternions)
         parameters_ = quaternion_parameters;
     }
 }
+
+void BALProblem::WriteToFile(const std::string& filename) const
+{
+    FILE* fptr = fopen(filename.c_str(), "w");
+
+    if (fptr == NULL)
+    {
+        std::cerr << "Error: unable to open file " << filename;
+        return;
+    }
+
+    fprintf(fptr, "%d %d %d %d\n", num_cameras_, num_cameras_, num_points_, num_observations_);
+
+    for (int i = 0; i < num_observations_; ++i)
+    {
+        fprintf(fptr, "%d %d", camera_index_[i], point_index_[i]);
+
+        for (int j = 0; j < 2; ++j)
+            fprintf(fptr, " %g", observations_[2 * i + j]);
+
+        fprintf(fptr, "\n");
+    }
+
+    for (int i = 0; i < num_cameras_; ++i)
+    {
+        double angleaxis[9];
+        if (use_quaternions_)
+        {
+            QuaternionToAngleAxis(parameters_ + 10 * i, angleaxis);
+            memcpy(angleaxis + 3, parameters_ + 10 * i + 4, 6 * sizeof(double));
+        }
+        else
+        {
+            memcpy(angleaxis, parameters_ + 9 * i, 9 * sizeof(double));
+        }
+
+        for (int j = 0; j < 9; ++j)
+            fprintf(fptr, "%.16g\n", angleaxis[j]);
+    }
+
+    const double* points = parameters_ + camera_block_size() * num_cameras_;
+    
+    for (int i = 0; i < num_points(); ++i)
+    {
+        const double* point = points + i * point_block_size();
+
+        for (int j = 0; j < point_block_size(); ++j)
+            fprintf(fptr, "%.16g\n", point[j]);
+    }
+
+    fclose(fptr);
+}
+
+void BALProblem::WriteToPLYFile(const std::string& filename) const
+{
+    std::ofstream of(filename.c_str());
+
+    of << "ply" << '\n'
+        << "format ascii 1.0" << '\n'
+        << "element vertex " << num_cameras_ + num_points_ << '\n'
+        << "property float x" << '\n'
+        << "property float y" << '\n'
+        << "property float z" << '\n'
+        << "property uchar red" << '\n'
+        << "property uchar green" << '\n'
+        << "property uchar blue" << '\n'
+        << "end_header" << std::endl;
+
+    double angle_axis[3];
+    double center[3];
+
+    for (int i = 0; i < num_cameras(); ++i)
+    {
+        const double* camera = cameras() + camera_block_size() * i;
+        CameraToAngleAxisAndCenter(camera, angle_axis, center);
+
+        of << center[0] << ' ' << center[1] << ' ' << center[2] << "0 255 0" << '\n';
+    }
+
+    const double* points = parameters_ + camera_block_size() * num_cameras_;
+
+    for (int i = 0; i < num_points(); ++i)
+    {
+        const double* point = points + i * point_block_size();
+
+        for (int j = 0; j < point_block_size(); ++j)
+            of << point[j] << ' ';
+
+        of << "255 255 255\n";
+    }
+
+    of.close();
+}
+
+void BALProblem::CameraToAngleAxisAndCenter(const double* camera, double* angle_axis, double* center) const
+{
+    VectorRef angle_axis_ref(angle_axis, 3);
+    if (use_quaternions_)
+    {
+        QuaternionToAngleAxis(camera, angle_axis);
+    }
+    else
+    {
+        angle_axis_ref = ConstVectorRef(camera, 3);
+    }
+
+    Eigen::VectorXd inverse_rotation = -angle_axis_ref;
+
+    AngleAxisRotationPoint(inverse_rotation.data(), camera + camera_block_size() - 6, center);
+
+    VectorRef(center, 3) *= -1.0;
+}
+
+void BALProblem::AngleAxisAndCenterToCamera(const double* angle_axis, const double* center, double* camera) const
+{
+    ConstVectorRef angle_axis_ref(angle_axis, 3);
+    if (use_quaternions_)
+    {
+        AngleAxisToQuaternion(angle_axis, camera);
+    }
+    else
+    {
+        VectorRef(camera, 3) = angle_axis_ref;
+    }
+
+    AngleAxisRotationPoint(angle_axis, center, camera + camera + camera_block_size() - 6);
+
+    VectorRef(camera + camera_block_size() - 6, 3) *= -1.0;
+}
+
+void BALProblem::Normalize()
+{
+    std::vector<double> tmp(num_points_);
+    Eigen::Vector3d median;
+    double* points = mutable_points();
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < num_points_; ++j)
+        {
+            tmp[j] = points[3 * j + i];
+        }
+
+        median(i) = Median(&tmp);
+    }
+
+    for (int i = 0; i < num_points_; ++i)
+    {
+        VectorRef point(points + 3 * i, 3);
+        tmp[i] = (point - median).lpNorm<1>();
+    }
+
+    const double median_absolute_deviation = Median(&tmp);
+
+    const double scale = 100.0 / median_absolute_deviation;
+
+    for (int i = 0; i < num_points_; ++i)
+    {
+        VectorRef point(points + 3 * i, 3);
+        point = scale * (point - median);
+    }
+
+    double* camera = mutable_cameras();
+    double angle_axis[3];
+    double center[3];
+
+    for (int i = 0; i < num_cameras_; ++i)
+    {
+        double* camera = cameras + camera_block_size() * i;
+        CameraToAngleAxisAndCenter(camera, angle_axis, center);
+
+        VectorRef(center, 3) = scale * (VectorRef(center, 3) - median);
+
+        AngleAxisAndCenterToCamera(angle_axis, center, camera);
+    }
+}
+
+void BALProblem::Perturb(const double rotation_sigma, const double translation_sigma, const double point_sigma)
+{
+    assert(point_sigma >= 0.0);
+    assert(point_sigma >= 0.0);
+    assert(translation_sigma >= 0.0);
+
+    double* points = mutable_points();
+    if (point_sigma > 0)
+    {
+        for (int i = 0; i < num_points_; ++i)
+            PerturbPoint3(point_sigma, points + 3 * i);
+    }
+
+    for (int i = 0 i < num_cameras_; ++i)
+    {
+        double* camera = mutable_cameras() + camera_block_size() * i;
+
+        double angle_axis[3];
+        double center[3];
+
+        CameraToAngleAxisAndCenter(camera, angle_axis, center);
+        if (rotation_sigma > 0.0)
+            PerturbPoint3(rotation_sigma, angle_axis);
+
+        AngleAxisAndCenterToCamera(angle_axis, center, camera);
+
+        if (translation_sigma > 0.0)
+            PerturbPoint3(translation_sigma, camera + camera_block_size() - 6);
+    }
+}
