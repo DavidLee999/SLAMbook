@@ -81,10 +81,10 @@ enum CommandArgumentType
 CommandArgs::CommandArgs()
 {}
 
-commandArgs::~CommandArgs()
+CommandArgs::~CommandArgs()
 {}
 
-bool CommandArgs::parseArgs::parseArgs(int argc, char** argv, bool exitOnError)
+bool CommandArgs::parseArgs(int argc, char** argv, bool exitOnError)
 {
     _progName = argv[0];
 
@@ -185,7 +185,7 @@ bool CommandArgs::parseArgs::parseArgs(int argc, char** argv, bool exitOnError)
     return true;
 }
 
-void CommandArgs::param(const std::strng& name, bool& p, bool defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, bool& p, bool defValue, const std::string& desc)
 {
     CommandArgument ca;
     ca.name = name;
@@ -198,7 +198,7 @@ void CommandArgs::param(const std::strng& name, bool& p, bool defValue, const st
     _args.push_back(ca);
 }
 
-void CommandArgs::param(const std::strng& name, int& p, int defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, int& p, int defValue, const std::string& desc)
 {
 
     CommandArgument ca;
@@ -212,7 +212,7 @@ void CommandArgs::param(const std::strng& name, int& p, int defValue, const std:
     _args.push_back(ca);
 }
 
-void CommandArgs::param(const std::strng& name, float& p, float defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, float& p, float defValue, const std::string& desc)
 {
 
     CommandArgument ca;
@@ -226,7 +226,7 @@ void CommandArgs::param(const std::strng& name, float& p, float defValue, const 
     _args.push_back(ca);
 }
 
-void CommandArgs::param(const std::strng& name, double& p, double defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, double& p, double defValue, const std::string& desc)
 {
 
     CommandArgument ca;
@@ -240,7 +240,7 @@ void CommandArgs::param(const std::strng& name, double& p, double defValue, cons
     _args.push_back(ca);
 }
 
-void CommandArgs::param(const std::strng& name, std::string& p, const std::strng& defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, std::string& p, const std::strng& defValue, const std::string& desc)
 {
 
     CommandArgument ca;
@@ -254,7 +254,7 @@ void CommandArgs::param(const std::strng& name, std::string& p, const std::strng
     _args.push_back(ca);
 }
 
-void CommandArgs::param(const std::strng& name, std::vector<int>& p, const std::vector<int>& defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, std::vector<int>& p, const std::vector<int>& defValue, const std::string& desc)
 {
 
     CommandArgument ca;
@@ -268,7 +268,7 @@ void CommandArgs::param(const std::strng& name, std::vector<int>& p, const std::
     _args.push_back(ca);
 }
 
-void CommandArgs::param(const std::strng& name, std::vector<double>& p, const std::vector<double>& defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, std::vector<double>& p, const std::vector<double>& defValue, const std::string& desc)
 {
 
     CommandArgument ca;
@@ -330,9 +330,9 @@ void CommandArgs::printHelp(std::ostream& os)
             {
                 string defaultValueStr = arg2str(_args[i]);
                 if (!defaultValueStr.empty())
-                    tableStrings.push_back(make_pair(_args[i].name + " " + type2str(_args[i].type), args[i].description + "default: " + defaultValueStr + ")"));
+                    tableStrings.push_back(make_pair(_args[i].name + " " + type2str(_args[i].type), _args[i].description + "default: " + defaultValueStr + ")"));
                 else
-                    tableStrings.push_back(make_pair(_args[i].name + " " + type2str(_args[i].type), _args[i],description));
+                    tableStrings.push_back(make_pair(_args[i].name + " " + type2str(_args[i].type), _args[i].description));
             }
             else
                 tableStrings.push_back(make_pair(_args[i].name, _args[i].description));
@@ -502,11 +502,11 @@ std::string CommandArgs::arg2str(const CommandArgument& ca) const
                 bool* data = static_cast<bool*>(ca.data);
                 stringstream auxStream;
                 auxStream << *data;
-                return auxStream;
+                return auxStream.str();
             }
         case CAT_STRING:
             {
-                string* data = static_cast<string*>(data.data);
+                string* data = static_cast<string*>(ca.data);
                 return *data;
             }
         case CAT_VECTOR_INT:

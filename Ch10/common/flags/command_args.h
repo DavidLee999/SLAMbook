@@ -53,7 +53,7 @@ class CommandArgs
 
         void printHelp(std::ostream& os);
 
-        bool parseParam(const std::string& paramFlag) const;
+        bool parsedParam(const std::string& paramFlag) const;
 
     protected:
         std::vector<CommandArgument> _args;

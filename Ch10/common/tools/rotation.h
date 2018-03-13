@@ -31,7 +31,7 @@ inline void AngleAxisToQuaternion(const T* angle_axis, T* quaternion)
     if (theta_squared > T(std::numeric_limits<double>::epsilon()))
     {
         const T theta = sqrt(theta_squared);
-        const T half_theta = tehta * T(0.5);
+        const T half_theta = theta * T(0.5);
         const T k = sin(half_theta) / theta;
 
         quaternion[0] = cos(half_theta);
@@ -63,7 +63,7 @@ inline void QuaternionToAngleAxis(const T* quaternion, T* angle_axis)
         const T sin_theta = sqrt(sin_squared_theta);
         const T& cos_theta = quaternion[0];
 
-        const T two_theta - T(2.0) * (cos_theta < 0.0) ? atan2(-sin_theta, -cos_theta) : atan2(sin_theta, cos_theta);
+        const T two_theta = T(2.0) * (cos_theta < 0.0) ? atan2(-sin_theta, -cos_theta) : atan2(sin_theta, cos_theta);
 
         const T k = two_theta / sin_theta;
 
@@ -81,7 +81,7 @@ inline void QuaternionToAngleAxis(const T* quaternion, T* angle_axis)
 }
 
 template<typename T>
-inline void AngleAxisRotationPoint(const T angle_axis[3], cons T pt[3], T result[3])
+inline void AngleAxisRotationPoint(const T angle_axis[3], const T pt[3], T result[3])
 {
     const T theta2 = DotProduct(angle_axis, angle_axis);
 

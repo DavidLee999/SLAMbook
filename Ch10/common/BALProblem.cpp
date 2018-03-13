@@ -222,7 +222,7 @@ void BALProblem::AngleAxisAndCenterToCamera(const double* angle_axis, const doub
         VectorRef(camera, 3) = angle_axis_ref;
     }
 
-    AngleAxisRotationPoint(angle_axis, center, camera + camera + camera_block_size() - 6);
+    AngleAxisRotationPoint(angle_axis, center, camera + camera_block_size() - 6);
 
     VectorRef(camera + camera_block_size() - 6, 3) *= -1.0;
 }
@@ -258,7 +258,7 @@ void BALProblem::Normalize()
         point = scale * (point - median);
     }
 
-    double* camera = mutable_cameras();
+    double* cameras = mutable_cameras();
     double angle_axis[3];
     double center[3];
 
