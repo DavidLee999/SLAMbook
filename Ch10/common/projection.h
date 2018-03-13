@@ -7,7 +7,7 @@ template<typename T>
 inline bool CamProjectionWithDistortion(const T* camera, const T* point, T* predictions)
 {
     T p[3];
-    AngleAxisRotationPoint(camera, point, p);
+    AngleAxisRotatePoint(camera, point, p);
 
     p[0] += camera[3];
     p[1] += camera[4];
