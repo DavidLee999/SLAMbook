@@ -79,7 +79,7 @@ void BuildProblem(const BALProblem* bal_problem, g2o::SparseOptimizer* optimizer
         }
 
         bal_edge->setVertex(0, dynamic_cast<VertexCameraBAL*>(optimizer->vertex(camera_id)));
-        bal_edge->setVertex(1, dynamic_cast<VertexCameraBAL*>(optimizer->vertex(point_id)));
+        bal_edge->setVertex(1, dynamic_cast<VertexPointBAL*>(optimizer->vertex(point_id)));
 
         bal_edge->setInformation(Eigen::Matrix2d::Identity());
         bal_edge->setMeasurement(Eigen::Vector2d(observations[2* i + 0], observations[2 * i + 1]));
