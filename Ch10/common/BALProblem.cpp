@@ -120,7 +120,7 @@ void BALProblem::WriteToFile(const std::string& filename) const
         fprintf(fptr, "\n");
     }
 
-    for (int i = 0; i < num_cameras_; ++i)
+    for (int i = 0; i < num_cameras(); ++i)
     {
         double angleaxis[9];
         if (use_quaternions_)
@@ -286,7 +286,7 @@ void BALProblem::Perturb(const double rotation_sigma, const double translation_s
             PerturbPoint3(point_sigma, points + 3 * i);
     }
 
-    for (int i = 0 i < num_cameras_; ++i)
+    for (int i = 0; i < num_cameras_; ++i)
     {
         double* camera = mutable_cameras() + camera_block_size() * i;
 

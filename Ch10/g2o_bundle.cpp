@@ -44,7 +44,7 @@ void BuildProblem(const BALProblem* bal_problem, g2o::SparseOptimizer* optimizer
     const double* raw_cameras = bal_problem->cameras();
     for (int i = 0; i < num_cameras; ++i)
     {
-        ConstVectorRef temVecCamera(row_cameras + camera_block_size * i, camera_block_size);
+        ConstVectorRef temVecCamera(raw_cameras + camera_block_size * i, camera_block_size);
         VertexCameraBAL* pCamera = new VertexCameraBAL();
         pCamera->setEstimate(temVecCamera);
         pCamera->setId(i);
@@ -73,7 +73,7 @@ void BuildProblem(const BALProblem* bal_problem, g2o::SparseOptimizer* optimizer
 
         if (params.robustify)
         {
-            g2o::RobustKernelHuber* rk = new g2o::RobustKernleHuber;
+            g2o::RobustKernelHuber* rk = new g2o::RobustKernelHuber;
             rk->setDelta(1.0);
             bal_edge->setRobustKernel(rk);
         }
@@ -104,7 +104,7 @@ void WriteToBALProblem(BALProblem* bal_problem, g2o::SparseOptimizer* optimizer)
         memcpy(raw_cameras + i * camera_block_size, newCameraVec.data(), sizeof(double) * camera_block_size);
     }
 
-    double* raw_points = bal_problem->mutable_point();
+    double* raw_points = bal_problem->mutable_points();
     for (int j = 0; j < num_points; ++j)
     {
         VertexPointBAL* pPoint = dynamic_cast<VertexPointBAL*>(optimizer->vertex(j + num_cameras));
@@ -118,15 +118,15 @@ void SetMinimizerOptions(std::shared_ptr<BalBlockSolver>& solver_ptr, const Bund
     g2o::OptimizationAlgorithmWithHessian* solver;
     if (params.trust_region_strategy == "levenberg_marquardt")
         solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr.get());
-    else if (params.trust_region_strategy = "dogleg")
-        solver = new g2o::OptimizationAlgorithmDoglen(solver_ptr.get());
+    else if (params.trust_region_strategy == "dogleg")
+        solver = new g2o::OptimizationAlgorithmDogleg(solver_ptr.get());
     else
     {
         std::cout << "Please chek your trust_region_strategy parameter again.\n";
         exit(EXIT_FAILURE);
     }
 
-    optimizer->setAlgrithm(solver);
+    optimizer->setAlgorithm(solver);
 }
 
 void SetLinearSolver(std::shared_ptr<BalBlockSolver>& solver_ptr, const BundleParams& params)
@@ -146,13 +146,13 @@ void SetLinearSolver(std::shared_ptr<BalBlockSolver>& solver_ptr, const BundlePa
     std::cout << "Set Complete.\n";
 }
 
-void setSolverOptionsFromFlags(BALProblem* bal_problem, const BundleParams& params, g2o::SparseOptimizer* optimizer)
+void SetSolverOptionsFromFlags(BALProblem* bal_problem, const BundleParams& params, g2o::SparseOptimizer* optimizer)
 {
     BalBlockSolver* solver_ptr;
 
-    g2p::LinearSolver<BalBlockSolver::PoseMatrixType>* linearSolver = 0;
+    g2o::LinearSolver<BalBlockSolver::PoseMatrixType>* linearSolver = 0;
 
-    if (param.linear_solver == "dense_schur")
+    if (params.linear_solver == "dense_schur")
         linearSolver = new g2o::LinearSolverDense<BalBlockSolver::PoseMatrixType>();
     else if (params.linear_solver == "sparse_schur")
     {
@@ -164,18 +164,17 @@ void setSolverOptionsFromFlags(BALProblem* bal_problem, const BundleParams& para
 
     g2o::OptimizationAlgorithmWithHessian* solver;
 
-    g2o::OptimizationAlgorithmWithHessian* solver;
     if (params.trust_region_strategy == "levenberg_marquardt")
-        solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr.get());
-    else if (params.trust_region_strategy = "dogleg")
-        solver = new g2o::OptimizationAlgorithmDoglen(solver_ptr.get());
+        solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr);
+    else if (params.trust_region_strategy == "dogleg")
+        solver = new g2o::OptimizationAlgorithmDogleg(solver_ptr);
     else
     {
         std::cout << "Please chek your trust_region_strategy parameter again.\n";
         exit(EXIT_FAILURE);
     }
 
-    optimizer->setAlgrithm(solver);
+    optimizer->setAlgorithm(solver);
 }
 
 void SolveProblem(const char* filename, const BundleParams& params)
@@ -198,12 +197,12 @@ void SolveProblem(const char* filename, const BundleParams& params)
     std::cout << "Normalization complete.\n";
 
     g2o::SparseOptimizer optimizer;
-    SetSolverOptionsFromFlag2(&bal_problem, &optimizer);
+    SetSolverOptionsFromFlags(&bal_problem, params, &optimizer);
     BuildProblem(&bal_problem, &optimizer, params);
 
     std::cout << "begin optimization.\n";
-
-    optimizer.initialOptimization();
+    
+    optimizer.initializeOptimization();
     optimizer.setVerbose(true);
     optimizer.optimize(params.num_iterations);
 
@@ -219,7 +218,7 @@ int main(int argc, char** argv)
 {
     BundleParams params(argc, argv);
 
-    if (params.input.emptry())
+    if (params.input.empty())
     {
         std::cout << "usage: bundle_adjuster -input <path for dataset>";
         return 1;

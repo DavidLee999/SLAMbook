@@ -10,8 +10,8 @@ using namespace std;
 
 std::istream& operator >> (std::istream& is, std::vector<int>& v);
 std::ostream& operator << (std::ostream& os, const std::vector<int>& v);
-std::ostream& operator >> (std::istream& is, std::vector<double>& v);
-std::ostream& operator << (std::istream& os, const std::vector<double>& v);
+std::istream& operator >> (std::istream& is, std::vector<double>& v);
+std::ostream& operator << (std::ostream& os, const std::vector<double>& v);
 
 
 std::istream& operator >> (std::istream& is, std::vector<int>& v)
@@ -178,7 +178,7 @@ bool CommandArgs::parseArgs(int argc, char** argv, bool exitOnError)
 
     for (size_t j = 0; (i < argc && j < _leftOversOptional.size()); i++, j++)
     {
-        string* s - static_cast<string*>(_leftOversOptional[j].data);
+        string* s = static_cast<string*>(_leftOversOptional[j].data);
         *s = argv[i];
     }
 
@@ -240,7 +240,7 @@ void CommandArgs::param(const std::string& name, double& p, double defValue, con
     _args.push_back(ca);
 }
 
-void CommandArgs::param(const std::string& name, std::string& p, const std::strng& defValue, const std::string& desc)
+void CommandArgs::param(const std::string& name, std::string& p, const std::string& defValue, const std::string& desc)
 {
 
     CommandArgument ca;
@@ -571,7 +571,7 @@ bool CommandArgs::parsedParam(const std::string& param) const
     std::vector<CommandArgument>::const_iterator it = _args.begin();
     for (; it != _args.end(); ++it)
     {
-        if (it->name = param)
+        if (it->name == param)
             return it->parsed;
     }
 

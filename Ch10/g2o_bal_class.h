@@ -3,7 +3,7 @@
 #include "g2o/core/base_vertex.h"
 #include "g2o/core/base_binary_edge.h"
 
-#include "ceres/autodiff"
+#include "ceres/autodiff.h"
 
 #include "common/tools/rotation.h"
 #include "common/projection.h"
@@ -14,13 +14,14 @@ class VertexCameraBAL: public g2o::BaseVertex<9, Eigen::VectorXd>
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
         VertexCameraBAL() {}
 
-        virtual bool read(std::istream& is)
+        virtual bool read(std::istream& /*is*/)
         { return false; }
 
-        virtual bool write(std::ostream& os) const
+        virtual bool write(std::ostream& /*os*/) const
         { return false; }
 
-        virtual bool setToOriginImpl() {}
+        virtual void setToOriginImpl() {}
+        
 
         virtual void oplusImpl(const double* update)
         {
@@ -36,10 +37,10 @@ class VertexPointBAL: public g2o::BaseVertex<3, Eigen::Vector3d>
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
         VertexPointBAL() {}
 
-        virtual bool read(std::istream& is)
+        virtual bool read(std::istream& /*is*/)
         { return false; }
 
-        virtual bool write(std::ostream& os) const
+        virtual bool write(std::ostream& /*os*/) const
         { return false; }
 
         virtual void setToOriginImpl() {}
@@ -59,10 +60,10 @@ class EdgeObservationBAL: public g2o::BaseBinaryEdge<2, Eigen::Vector2d, VertexC
 
         EdgeObservationBAL() {}
 
-        virtual bool read(std::istream& is)
+        virtual bool read(std::istream& /*is*/)
         { return false; }
 
-        virtual bool read(std::ostream& os)
+        virtual bool write(std::ostream& /*os*/) const
         { return false; }
 
         virtual void computeError() override
@@ -98,16 +99,16 @@ class EdgeObservationBAL: public g2o::BaseBinaryEdge<2, Eigen::Vector2d, VertexC
             Eigen::Matrix<double, Dimension, VertexPointBAL::Dimension, Eigen::RowMajor> dError_dPoint;
 
             double* parameters[] = { const_cast<double*>(cam->estimate().data()), const_cast<double*>(point->estimate().data()) };
-            double* jacobians[] = { dError_dCamera.data, dError_dPoint.data(); };
+            double* jacobians[] = { dError_dCamera.data(), dError_dPoint.data() };
 
             double value[Dimension];
 
-            bool dissState = BalAutoDiff::Differentiate(*this, parameters, Dimension, value, jacobians);
+            bool diffState = BalAutoDiff::Differentiate(*this, parameters, Dimension, value, jacobians);
 
             if (diffState)
             {
                 _jacobianOplusXi = dError_dCamera;
-                _jacobianOplusXi = dError_dPoint;
+                _jacobianOplusXj = dError_dPoint;
             }
             else
             {

@@ -63,7 +63,7 @@ inline void QuaternionToAngleAxis(const T* quaternion, T* angle_axis)
         const T sin_theta = sqrt(sin_squared_theta);
         const T& cos_theta = quaternion[0];
 
-        const T two_theta = T(2.0) * (cos_theta < 0.0) ? atan2(-sin_theta, -cos_theta) : atan2(sin_theta, cos_theta);
+        const T two_theta = T(2.0) * ((cos_theta < 0.0) ? atan2(-sin_theta, -cos_theta) : atan2(sin_theta, cos_theta));
 
         const T k = two_theta / sin_theta;
 
