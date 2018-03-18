@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named pose_graph_g2o_lie
+
+# Build rule for target.
+pose_graph_g2o_lie: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pose_graph_g2o_lie
+.PHONY : pose_graph_g2o_lie
+
+# fast build rule for target.
+pose_graph_g2o_lie/fast:
+	$(MAKE) -f CMakeFiles/pose_graph_g2o_lie.dir/build.make CMakeFiles/pose_graph_g2o_lie.dir/build
+.PHONY : pose_graph_g2o_lie/fast
+
+#=============================================================================
 # Target rules for targets named pose_graph_g2o_SE3
 
 # Build rule for target.
@@ -150,18 +163,49 @@ pose_graph_g2o_SE3.cpp.s:
 	$(MAKE) -f CMakeFiles/pose_graph_g2o_SE3.dir/build.make CMakeFiles/pose_graph_g2o_SE3.dir/pose_graph_g2o_SE3.cpp.s
 .PHONY : pose_graph_g2o_SE3.cpp.s
 
+pose_graph_g2o_lie_algebra.o: pose_graph_g2o_lie_algebra.cpp.o
+
+.PHONY : pose_graph_g2o_lie_algebra.o
+
+# target to build an object file
+pose_graph_g2o_lie_algebra.cpp.o:
+	$(MAKE) -f CMakeFiles/pose_graph_g2o_lie.dir/build.make CMakeFiles/pose_graph_g2o_lie.dir/pose_graph_g2o_lie_algebra.cpp.o
+.PHONY : pose_graph_g2o_lie_algebra.cpp.o
+
+pose_graph_g2o_lie_algebra.i: pose_graph_g2o_lie_algebra.cpp.i
+
+.PHONY : pose_graph_g2o_lie_algebra.i
+
+# target to preprocess a source file
+pose_graph_g2o_lie_algebra.cpp.i:
+	$(MAKE) -f CMakeFiles/pose_graph_g2o_lie.dir/build.make CMakeFiles/pose_graph_g2o_lie.dir/pose_graph_g2o_lie_algebra.cpp.i
+.PHONY : pose_graph_g2o_lie_algebra.cpp.i
+
+pose_graph_g2o_lie_algebra.s: pose_graph_g2o_lie_algebra.cpp.s
+
+.PHONY : pose_graph_g2o_lie_algebra.s
+
+# target to generate assembly for a file
+pose_graph_g2o_lie_algebra.cpp.s:
+	$(MAKE) -f CMakeFiles/pose_graph_g2o_lie.dir/build.make CMakeFiles/pose_graph_g2o_lie.dir/pose_graph_g2o_lie_algebra.cpp.s
+.PHONY : pose_graph_g2o_lie_algebra.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... pose_graph_g2o_lie"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... pose_graph_g2o_SE3"
 	@echo "... pose_graph_g2o_SE3.o"
 	@echo "... pose_graph_g2o_SE3.i"
 	@echo "... pose_graph_g2o_SE3.s"
+	@echo "... pose_graph_g2o_lie_algebra.o"
+	@echo "... pose_graph_g2o_lie_algebra.i"
+	@echo "... pose_graph_g2o_lie_algebra.s"
 .PHONY : help
 
 

@@ -1,3 +1,4 @@
+/Users/lipenghua/GitHub/SLAMbook/Ch11/build/CMakeFiles/pose_graph_g2o_lie.dir
 /Users/lipenghua/GitHub/SLAMbook/Ch11/build/CMakeFiles/rebuild_cache.dir
 /Users/lipenghua/GitHub/SLAMbook/Ch11/build/CMakeFiles/edit_cache.dir
 /Users/lipenghua/GitHub/SLAMbook/Ch11/build/CMakeFiles/pose_graph_g2o_SE3.dir

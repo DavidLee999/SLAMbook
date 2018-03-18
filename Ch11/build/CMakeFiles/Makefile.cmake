@@ -70,5 +70,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "CMakeFiles/pose_graph_g2o_lie.dir/DependInfo.cmake"
   "CMakeFiles/pose_graph_g2o_SE3.dir/DependInfo.cmake"
   )
