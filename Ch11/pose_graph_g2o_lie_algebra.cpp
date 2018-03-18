@@ -99,7 +99,7 @@ class EdgeSE3LieAlgebra: public g2o::BaseBinaryEdge<6, SE3, VertexSE3LieAlgebra,
                     );
 
             for (int i = 0; i < information().rows() && is.good(); i++)
-                for (int j = 0; j < information().cols() && is.good(); j++)
+                for (int j = i; j < information().cols() && is.good(); j++)
                 {
                     is >> information()(i, j);
 
@@ -121,7 +121,7 @@ class EdgeSE3LieAlgebra: public g2o::BaseBinaryEdge<6, SE3, VertexSE3LieAlgebra,
             os << q.coeffs()[0] << " " << q.coeffs()[1] << " " << q.coeffs()[2] << " " << q.coeffs()[3] << " ";
 
             for (int i = 0; i < information().rows(); i++)
-                for (int j = 0; j < information().cols(); j++)
+                for (int j = i; j < information().cols(); j++)
                     os << information()(i, j) << " ";
 
             os << endl;
@@ -146,7 +146,7 @@ class EdgeSE3LieAlgebra: public g2o::BaseBinaryEdge<6, SE3, VertexSE3LieAlgebra,
             Matrix6d J = JRInv(SE3::exp(_error));
 
             _jacobianOplusXi = -J * v2.inverse().Adj();
-            _jacobianOplusXj = -J * v2.inverse().Adj();
+            _jacobianOplusXj = J * v2.inverse().Adj();
 
         }
 };
