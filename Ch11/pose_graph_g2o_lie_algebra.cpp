@@ -30,7 +30,8 @@ Matrix6d JRInv(SE3 e)
     J.block(3, 0, 3, 3) = Eigen::Matrix3d::Zero(3, 3);
     J.block(3, 3, 3, 3) = SO3::hat(e.so3().log());
 
-    J = J * 0.5 + Matrix6d::Identity();
+    // J = J * 0.5 + Matrix6d::Identity();
+    J = Matrix6d::Identity();
 
     return J;
 }
