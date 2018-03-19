@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named pose_graph_gtsam
+
+# Build rule for target.
+pose_graph_gtsam: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pose_graph_gtsam
+.PHONY : pose_graph_gtsam
+
+# fast build rule for target.
+pose_graph_gtsam/fast:
+	$(MAKE) -f CMakeFiles/pose_graph_gtsam.dir/build.make CMakeFiles/pose_graph_gtsam.dir/build
+.PHONY : pose_graph_gtsam/fast
+
+#=============================================================================
 # Target rules for targets named pose_graph_g2o_lie
 
 # Build rule for target.
@@ -190,12 +203,40 @@ pose_graph_g2o_lie_algebra.cpp.s:
 	$(MAKE) -f CMakeFiles/pose_graph_g2o_lie.dir/build.make CMakeFiles/pose_graph_g2o_lie.dir/pose_graph_g2o_lie_algebra.cpp.s
 .PHONY : pose_graph_g2o_lie_algebra.cpp.s
 
+pose_graph_gtsam.o: pose_graph_gtsam.cpp.o
+
+.PHONY : pose_graph_gtsam.o
+
+# target to build an object file
+pose_graph_gtsam.cpp.o:
+	$(MAKE) -f CMakeFiles/pose_graph_gtsam.dir/build.make CMakeFiles/pose_graph_gtsam.dir/pose_graph_gtsam.cpp.o
+.PHONY : pose_graph_gtsam.cpp.o
+
+pose_graph_gtsam.i: pose_graph_gtsam.cpp.i
+
+.PHONY : pose_graph_gtsam.i
+
+# target to preprocess a source file
+pose_graph_gtsam.cpp.i:
+	$(MAKE) -f CMakeFiles/pose_graph_gtsam.dir/build.make CMakeFiles/pose_graph_gtsam.dir/pose_graph_gtsam.cpp.i
+.PHONY : pose_graph_gtsam.cpp.i
+
+pose_graph_gtsam.s: pose_graph_gtsam.cpp.s
+
+.PHONY : pose_graph_gtsam.s
+
+# target to generate assembly for a file
+pose_graph_gtsam.cpp.s:
+	$(MAKE) -f CMakeFiles/pose_graph_gtsam.dir/build.make CMakeFiles/pose_graph_gtsam.dir/pose_graph_gtsam.cpp.s
+.PHONY : pose_graph_gtsam.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... pose_graph_gtsam"
 	@echo "... pose_graph_g2o_lie"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
@@ -206,6 +247,9 @@ help:
 	@echo "... pose_graph_g2o_lie_algebra.o"
 	@echo "... pose_graph_g2o_lie_algebra.i"
 	@echo "... pose_graph_g2o_lie_algebra.s"
+	@echo "... pose_graph_gtsam.o"
+	@echo "... pose_graph_gtsam.i"
+	@echo "... pose_graph_gtsam.s"
 .PHONY : help
 
 

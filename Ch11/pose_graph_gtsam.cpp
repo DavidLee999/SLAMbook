@@ -25,7 +25,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    ifstream fin(argc[1]);
+    ifstream fin(argv[1]);
     if (!fin)
     {
         cout << "file " << argv[1] << " does not exist\n";
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     while (!fin.eof()){
         string tag;
         fin >> tag;
-        if (tag == "VERTEXSE3:QUAT")
+        if (tag == "VERTEX_SE3:QUAT")
         {
             gtsam::Key id;
             fin >> id;
@@ -86,7 +86,7 @@ int main(int argc, char** argv)
 
             gtsam::SharedNoiseModel model = gtsam::noiseModel::Gaussian::Information(mgtsam);
             gtsam::NonlinearFactor::shared_ptr factor(
-                    new gtsam::BetweenFactor<gtsam::Pose3>(id1, di2, gtsam::Pose(R, t), modle)
+                    new gtsam::BetweenFactor<gtsam::Pose3>(id1, id2, gtsam::Pose3(R, t), model)
                     );
 
             graph->push_back(factor);
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
     }
 
     cout << "optimizing the factor graph\n";
-    gstam::LevenbergMarquardtParams params_lm;
+    gtsam::LevenbergMarquardtParams params_lm;
     params_lm.setVerbosity("ERROR");
     params_lm.setMaxIterations(20);
     params_lm.setLinearSolverType("MULTIFRONTAL_QR");
@@ -130,7 +130,7 @@ int main(int argc, char** argv)
 
     cout << "done. write to g2o ...\n";
 
-    ofstream fout(result_gtsam.g2o);
+    ofstream fout("result_gtsam.g2o");
     for (const gtsam::Values::ConstKeyValuePair& key_value : result)
     {
         gtsam::Pose3 pose = key_value.value.cast<gtsam::Pose3>();
@@ -151,7 +151,7 @@ int main(int argc, char** argv)
 
             if (gaussianModel)
             {
-                gtsam::Matrix info = guassianModel->R().transpose() * gaussianModel->R();
+                gtsam::Matrix info = gaussianModel->R().transpose() * gaussianModel->R();
                 gtsam::Pose3 pose = f->measured();
                 gtsam::Point3 p = pose.translation();
                 gtsam::Quaternion q = pose.rotation().toQuaternion();
