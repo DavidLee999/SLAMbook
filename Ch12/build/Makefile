@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named loop_closure
+
+# Build rule for target.
+loop_closure: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 loop_closure
+.PHONY : loop_closure
+
+# fast build rule for target.
+loop_closure/fast:
+	$(MAKE) -f CMakeFiles/loop_closure.dir/build.make CMakeFiles/loop_closure.dir/build
+.PHONY : loop_closure/fast
+
+#=============================================================================
 # Target rules for targets named feature_training
 
 # Build rule for target.
@@ -150,6 +163,33 @@ feature_training.cpp.s:
 	$(MAKE) -f CMakeFiles/feature_training.dir/build.make CMakeFiles/feature_training.dir/feature_training.cpp.s
 .PHONY : feature_training.cpp.s
 
+loop_closure.o: loop_closure.cpp.o
+
+.PHONY : loop_closure.o
+
+# target to build an object file
+loop_closure.cpp.o:
+	$(MAKE) -f CMakeFiles/loop_closure.dir/build.make CMakeFiles/loop_closure.dir/loop_closure.cpp.o
+.PHONY : loop_closure.cpp.o
+
+loop_closure.i: loop_closure.cpp.i
+
+.PHONY : loop_closure.i
+
+# target to preprocess a source file
+loop_closure.cpp.i:
+	$(MAKE) -f CMakeFiles/loop_closure.dir/build.make CMakeFiles/loop_closure.dir/loop_closure.cpp.i
+.PHONY : loop_closure.cpp.i
+
+loop_closure.s: loop_closure.cpp.s
+
+.PHONY : loop_closure.s
+
+# target to generate assembly for a file
+loop_closure.cpp.s:
+	$(MAKE) -f CMakeFiles/loop_closure.dir/build.make CMakeFiles/loop_closure.dir/loop_closure.cpp.s
+.PHONY : loop_closure.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -158,10 +198,14 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... loop_closure"
 	@echo "... feature_training"
 	@echo "... feature_training.o"
 	@echo "... feature_training.i"
 	@echo "... feature_training.s"
+	@echo "... loop_closure.o"
+	@echo "... loop_closure.i"
+	@echo "... loop_closure.s"
 .PHONY : help
 
 

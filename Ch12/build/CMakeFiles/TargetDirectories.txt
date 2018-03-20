@@ -1,3 +1,4 @@
 /Users/lipenghua/GitHub/SLAMbook/Ch12/build/CMakeFiles/rebuild_cache.dir
 /Users/lipenghua/GitHub/SLAMbook/Ch12/build/CMakeFiles/edit_cache.dir
+/Users/lipenghua/GitHub/SLAMbook/Ch12/build/CMakeFiles/loop_closure.dir
 /Users/lipenghua/GitHub/SLAMbook/Ch12/build/CMakeFiles/feature_training.dir

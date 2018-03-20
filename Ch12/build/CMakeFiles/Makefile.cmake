@@ -124,5 +124,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "CMakeFiles/loop_closure.dir/DependInfo.cmake"
   "CMakeFiles/feature_training.dir/DependInfo.cmake"
   )
