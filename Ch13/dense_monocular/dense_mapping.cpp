@@ -46,7 +46,7 @@ bool update(
 bool epipolarSearch(
         const Mat& ref,
         const Mat& curr,
-        const SE3& T_C_R,
+        const SE3& T_C_R, // ref to curr
         const Vector2d& pt_ref,
         const double& depth_mu,
         const double& depth_cov,
@@ -72,7 +72,7 @@ inline double getBilinearInterpolatedValue(const Mat& img, const Vector2d& pt)
 
     return ((1 - xx) * (1 - yy) * double(d[0]) +
             xx * (1 - yy) * double(d[1]) +
-            (1 - xx) * yy * double(d[img.step])
+            (1 - xx) * yy * double(d[img.step]) +
             xx * yy * double(d[img.step + 1])) / 255.0;
 }
 
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
     }
 
     vector<string> color_image_files;
-    vector<SE3> poses_TWC;
+    vector<SE3> poses_TWC; // cam to world
     bool ret = readDatasetFiles(argv[1], color_image_files, pose_TWC);
     if (ret == false)
     {
@@ -158,7 +158,7 @@ bool readDatasetFiles(
         vector<string>& color_image_files,
         std::vector<SE3> poses)
 {
-    ifstream fin(path + "/first _200_frames_traj_over_table_input_sequence.txt");
+    ifstream fin(path + "/first_200_frames_traj_over_table_input_sequence.txt");
     if (!fin)
         return false;
 
@@ -331,7 +331,7 @@ bool updateDepthFilter(
     Vector3d xm = lambdaavec(0, 0) * f_ref;
     Vector3d xn = t + lambdaavec(1, 0) * f2;
     Vector3d d_esti = (xm + xn) / 2.0;
-    double depth_estimation - d_esti.norm();
+    double depth_estimation = d_esti.norm();
 
     Vector3d p = f_ref * depth_estimation;
     Vector3d a = p - t;
@@ -353,7 +353,7 @@ bool updateDepthFilter(
     double sigma_fuse2 = (sigma2 * d_cov2) / (sigma2 + d_cov2);
 
     depth.ptr<double>( int(pt_ref(1, 0)) )[int(pt_ref(0, 0))] = mu_fuse;
-    depth_cov<double>( int(pt_ref(1, 0)) )[int(pt_ref(0, 0))] = sigma_fuse2;
+    depth_cov.ptr<double>( int(pt_ref(1, 0)) )[int(pt_ref(0, 0))] = sigma_fuse2;
 
     return true;
 }
