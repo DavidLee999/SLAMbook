@@ -113,7 +113,7 @@ int main(int argc, char** argv)
 
     vector<string> color_image_files;
     vector<SE3> poses_TWC; // cam to world
-    bool ret = readDatasetFiles(argv[1], color_image_files, pose_TWC);
+    bool ret = readDatasetFiles(argv[1], color_image_files, poses_TWC);
     if (ret == false)
     {
         cout << "Reading image files failed!\n";
@@ -134,9 +134,12 @@ int main(int argc, char** argv)
         cout << "*** loop " << index << " ***\n";
         Mat curr = imread(color_image_files[index], 0);
         if (curr.data == nullptr)
+        {
+            cout << "image " << index << " does not exist.\n";
             continue;
+        }
 
-        SE3 pose_curr_TWC = pose_TWC[index];
+        SE3 pose_curr_TWC = poses_TWC[index];
         SE3 pose_T_C_R = pose_curr_TWC.inverse() * pose_ref_TWC;
 
         update(ref, curr, pose_T_C_R, depth, depth_cov);
@@ -156,7 +159,7 @@ int main(int argc, char** argv)
 bool readDatasetFiles(
         const string& path,
         vector<string>& color_image_files,
-        std::vector<SE3> poses)
+        std::vector<SE3>& poses)
 {
     ifstream fin(path + "/first_200_frames_traj_over_table_input_sequence.txt");
     if (!fin)
@@ -238,7 +241,7 @@ bool epipolarSearch(
     if (half_length > 100)
         half_length = 100;
 
-    showEpipolarLine(ref, curr, pt_ref, px_min_curr, px_max_curr);
+    // showEpipolarLine(ref, curr, pt_ref, px_min_curr, px_max_curr);
 
     double best_ncc = -1.0;
     Vector2d best_px_curr;
@@ -289,7 +292,7 @@ double NCC(
     for (int i = 0; i < values_ref.size(); i++)
     {
         double n = (values_ref[i] - mean_ref) * (values_curr[i] - mean_curr);
-        numerator += 1;
+        numerator += n;
         demoniator1 += (values_ref[i] - mean_ref) * (values_ref[i] - mean_ref);
         demoniator2 += (values_curr[i] - mean_curr) * (values_curr[i] - mean_curr);
     }
@@ -310,20 +313,20 @@ bool updateDepthFilter(
     Vector3d f_ref = px2cam(pt_ref);
     f_ref.normalize();
     
-    Vcctor3d f_curr = px2cam(pt_curr);
+    Vector3d f_curr = px2cam(pt_curr);
     f_curr.normalize();
 
     Vector3d t = T_R_C.translation();
     Vector3d f2 = T_R_C.rotation_matrix() * f_curr;
     Vector2d b = Vector2d(t.dot(f_ref), t.dot(f2));
 
-    double A = 4;
+    double A[4];
     A[0] = f_ref.dot(f_ref);
     A[2] = f_ref.dot(f2);
     A[1] = -A[2];
     A[3] = -f2.dot(f2);
 
-    double d = A[0] * A[3] = A[1] * A[2];
+    double d = A[0] * A[3] - A[1] * A[2];
     Vector2d lambdaavec = 
         Vector2d( A[3] * b(0, 0) - A[1] * b(1, 0),
                  -A[2] * b(0, 0) + A[0] * b(1, 0)) / d;
@@ -346,8 +349,8 @@ bool updateDepthFilter(
     double d_cov = p_prime - depth_estimation;
     double d_cov2 = d_cov * d_cov;
 
-    double mu = depth.ptr<double( int(pt_ref(1.0)) )[int(pt_ref(0, 0))];
-    double sigma2 = depth_cov.ptr<double( int(pt_ref(1, 0)) )[int(pt_ref(0, 0))];
+    double mu = depth.ptr<double>( int(pt_ref(1, 0)) )[int(pt_ref(0, 0))];
+    double sigma2 = depth_cov.ptr<double>( int(pt_ref(1, 0)) )[int(pt_ref(0, 0))];
 
     double mu_fuse = (d_cov2 * mu + sigma2 * depth_estimation) / (sigma2 + d_cov2);
     double sigma_fuse2 = (sigma2 * d_cov2) / (sigma2 + d_cov2);
@@ -385,9 +388,9 @@ void showEpipolarLine(const Mat& ref, const Mat& curr, const Vector2d& px_ref, c
     cv::cvtColor(curr, curr_show, CV_GRAY2BGR);
 
     cv::circle(ref_show, cv::Point2f(px_ref(0, 0), px_ref(1, 0)), 5, cv::Scalar(0, 255, 0), 2);
-    cv::circle(curr_show, cv::Point2f(px_min_ref(0, 0), px_min_ref(1, 0)), 5, cv::Scalar(0, 255, 0), 2);
-    cv::circle(curr_show, cv::Point2f(px_max_ref(0, 0), px_max_ref(1, 0)), 5, cv::Scalar(0, 255, 0), 2);
-    cv::line(curr_show, Point2f(px_min_ref(0, 0), px_min_ref(1, 0)), Point2f(px_max_curr(0, 0), px_max_curr(1, 0)), cv::Scalar(0, 255, 0), 1);
+    cv::circle(curr_show, cv::Point2f(px_min_curr(0, 0), px_min_curr(1, 0)), 5, cv::Scalar(0, 255, 0), 2);
+    cv::circle(curr_show, cv::Point2f(px_max_curr(0, 0), px_min_curr(1, 0)), 5, cv::Scalar(0, 255, 0), 2);
+    cv::line(curr_show, Point2f(px_min_curr(0, 0), px_min_curr(1, 0)), Point2f(px_max_curr(0, 0), px_max_curr(1, 0)), cv::Scalar(0, 255, 0), 1);
 
     imshow("ref", ref_show);
     imshow("curr", curr_show);
