@@ -19,3 +19,6 @@ add_executable( pointcloud_mapping pointcloud_mapping.cpp )
 target_link_libraries( pointcloud_mapping ${OpenCV_LIBS} ${PCL_LIBRARIES} )
 
 #/usr/local/Cellar/pcl/1.8.1/pcl_viewer.app/Contents/MacOS/pcl_viewer
+
+add_executable( octomap_mapping octomap_mapping.cpp )
+target_link_libraries( octomap_mapping ${OpenCV_LIBS} ${PCL_LIBRARIES} ${OCTOMAP_LIBRARIES} )
