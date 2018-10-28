@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -11,6 +12,7 @@ using namespace std;
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d/features2d.hpp>
+#include <opencv2/viz.hpp>
 
 #include <g2o/core/base_unary_edge.h>
 #include <g2o/core/block_solver.h>
@@ -164,6 +166,7 @@ int main(int argc, char** argv)
     string rgb_file, depth_file, time_rgb, time_depth;
     cv::Mat color, depth, gray;
     vector<Measurement> measurements;
+	vector<Measurement> new_mea;
 
     float cx = 325.5;
     float cy = 253.5;
@@ -175,10 +178,22 @@ int main(int argc, char** argv)
     K << fx, 0.f, cx, 0.f, fy, cy, 0.f, 0.f, 1.0f;
 
     Eigen::Isometry3d Tcw = Eigen::Isometry3d::Identity();
+    Eigen::Isometry3d Tcw_cam = Eigen::Isometry3d::Identity();
 
     cv::Mat prev_color;
 
-    for (int index = 0; index < 10; index++)
+	cv::viz::Viz3d vis("camera pose");
+	cv::viz::WCoordinateSystem world_coor(1.0), camera_coor(0.5);
+	cv::Point3d cam_pos(0, -1.0, -1.0), cam_focal_point(0, 0, 0), cam_y_dir(0, 1, 0);
+	cv::Affine3d cam_pose = cv::viz::makeCameraPose(cam_pos, cam_focal_point, cam_y_dir);
+	vis.setViewerPose(cam_pose);
+
+	world_coor.setRenderingProperty(cv::viz::LINE_WIDTH, 2.0);
+    camera_coor.setRenderingProperty(cv::viz::LINE_WIDTH, 1.0);
+    vis.showWidget( "World", world_coor );
+    vis.showWidget( "Camera", camera_coor );
+
+    for (int index = 0; index < 500; index++)
     {
         cout << "******** loop " << index << "*********\n";
         
@@ -194,26 +209,27 @@ int main(int argc, char** argv)
 
         if (index == 0)
         {
-            vector<cv::KeyPoint> keypoints;
-            cv::Ptr<cv::FastFeatureDetector> detector = cv::FastFeatureDetector::create();
-            detector->detect(color, keypoints);
+		vector<cv::KeyPoint> keypoints;
+		cv::Ptr<cv::FastFeatureDetector> detector = cv::FastFeatureDetector::create();
+		detector->detect(color, keypoints);
 
-            for (auto kp : keypoints)
-            {
-                if (kp.pt.x < 20 || kp.pt.y < 20 || (kp.pt.x + 20) > color.cols || (kp.pt.y + 20) > color.rows)
-                    continue;
-                
-                ushort d = depth.ptr<ushort>(cvRound(kp.pt.y))[cvRound(kp.pt.x)];
-                if (d == 0)
-                    continue;
-                
-                Eigen::Vector3d p3d = project2Dto3D(kp.pt.x, kp.pt.y, d, fx, fy, cx, cy, depth_scale);
-                float grayscale = float(gray.ptr<uchar>(cvRound(kp.pt.y))[cvRound(kp.pt.x)]);
-                measurements.push_back(Measurement(p3d, grayscale));
+		for (auto kp : keypoints)
+		{
+			if (kp.pt.x < 20 || kp.pt.y < 20 || (kp.pt.x + 20) > color.cols || (kp.pt.y + 20) > color.rows)
+				continue;
 
-            }
-            prev_color = color.clone();
-                
+			ushort d = depth.ptr<ushort>(cvRound(kp.pt.y))[cvRound(kp.pt.x)];
+			if (d == 0)
+				continue;
+
+			Eigen::Vector3d p3d = project2Dto3D(kp.pt.x, kp.pt.y, d, fx, fy, cx, cy, depth_scale);
+			float grayscale = float(gray.ptr<uchar>(cvRound(kp.pt.y))[cvRound(kp.pt.x)]);
+			measurements.push_back(Measurement(p3d, grayscale));
+
+		}
+		prev_color = color.clone();
+
+		// if (index == 0)
             continue;
         }
 
@@ -226,9 +242,9 @@ int main(int argc, char** argv)
         cout << "direct method cost time: " << time_used.count() << "s.\n";
         cout << "Tcw = \n" << Tcw.matrix() << endl;
 
-        cv::Mat img_show(color.rows * 2, color.cols, CV_8UC3);
+        cv::Mat img_show(color.rows, color.cols * 2, CV_8UC3);
         prev_color.copyTo(img_show(cv::Rect(0, 0, color.cols, color.rows)));
-        color.copyTo(img_show(cv::Rect(0, color.rows, color.cols, color.rows)));
+        color.copyTo(img_show(cv::Rect(color.cols, 0, color.cols, color.rows)));
 
         for (Measurement m : measurements)
         {
@@ -244,18 +260,37 @@ int main(int argc, char** argv)
             if (pixel_now(0, 0) < 0 || pixel_now(0,  0) >= color.cols || pixel_now(1, 0) < 0 || pixel_now(1, 0) >= color.rows)
                 continue;
 
+			
             float b = 255 * float(rand()) / RAND_MAX;
             float g = 255 * float(rand()) / RAND_MAX;
             float r = 255 * float(rand()) / RAND_MAX;
 
             cv::circle(img_show, cv::Point2d(pixel_prev(0, 0), pixel_prev(1, 0)), 8, cv::Scalar(b, g, r), 2);
-            cv::circle(img_show, cv::Point2d(pixel_now(0, 0), pixel_now(1, 0) + color.rows), 8, cv::Scalar(b, g, r), 2);
-            cv::line(img_show, cv::Point2d(pixel_prev(0, 0), pixel_prev(1, 0)), cv::Point2d(pixel_now(0, 0), pixel_now(1, 0) + color.rows), cv::Scalar(b, g, r), 1);
+            cv::circle(img_show, cv::Point2d(pixel_now(0, 0) + color.cols, pixel_now(1, 0)), 8, cv::Scalar(b, g, r), 2);
+            cv::line(img_show, cv::Point2d(pixel_prev(0, 0), pixel_prev(1, 0)), cv::Point2d(pixel_now(0, 0) + color.cols, pixel_now(1, 0)), cv::Scalar(b, g, r), 1);
 
         }
 
+		// Tcw_cam = Tcw * Tcw_cam;
+		Eigen::Isometry3d Twc = Tcw.inverse();
+        // cout << "Tcw_cam = \n" << Tcw_cam.matrix() << endl;
+        cout << "Twc = \n" << Twc.matrix() << endl;
+		cv::Affine3d M(
+				cv::Affine3d::Mat3( 
+					Twc(0,0), Twc(0,1), Twc(0,2),
+					Twc(1,0), Twc(1,1), Twc(1,2),
+					Twc(2,0), Twc(2,1), Twc(2,2)), 
+				cv::Affine3d::Vec3(
+					Twc(0,3), Twc(1,3), Twc(2,3))
+				);
+
+		vis.setWidgetPose("Camera", M);
+		vis.spinOnce(1, false);
+
+		// measurements.clear();
         cv::imshow("result", img_show);
         cv::waitKey(0);
+
     }
 
     return 0;
@@ -272,7 +307,7 @@ bool poseEstimationDirect(const vector<Measurement>& measurements, cv::Mat* gray
     g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr);
     g2o::SparseOptimizer optimizer;
     optimizer.setAlgorithm(solver);
-    optimizer.setVerbose(true);
+    optimizer.setVerbose(false);
 
     g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();
     pose->setEstimate(g2o::SE3Quat(Tcw.rotation(), Tcw.translation()));

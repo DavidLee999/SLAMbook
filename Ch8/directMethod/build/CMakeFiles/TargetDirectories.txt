@@ -1,0 +1,3 @@
+/Users/lipenghua/GitHub/SLAMbook/Ch8/directMethod/build/CMakeFiles/rebuild_cache.dir
+/Users/lipenghua/GitHub/SLAMbook/Ch8/directMethod/build/CMakeFiles/edit_cache.dir
+/Users/lipenghua/GitHub/SLAMbook/Ch8/directMethod/build/CMakeFiles/direct_sparse.dir

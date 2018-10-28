@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="myslam"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="clang"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\..\usr\local\share\OpenCV\;CMake Files\..\..\..\Sophus\;CMake Files\..\..\..\Sophus\build\;CMake Files\cmake_modules\;CMake Files\src\;CMake Files\test\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="myslam">
+				<Option output="/Users/lipenghua/GitHub/SLAMbook/Ch9/lib/libmyslam.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/usr/local/Cellar/eigen/3.3.4/include/eigen3"/>
+					<Add directory="/Users/lipenghua/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/lipenghua/GitHub/SLAMbook/Ch9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 myslam"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="myslam/fast">
+				<Option output="/Users/lipenghua/GitHub/SLAMbook/Ch9/lib/libmyslam.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/usr/local/Cellar/eigen/3.3.4/include/eigen3"/>
+					<Add directory="/Users/lipenghua/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/lipenghua/GitHub/SLAMbook/Ch9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 myslam/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="run_vo">
+				<Option output="/Users/lipenghua/GitHub/SLAMbook/Ch9/bin/run_vo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lipenghua/GitHub/SLAMbook/Ch9/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/usr/local/Cellar/eigen/3.3.4/include/eigen3"/>
+					<Add directory="/Users/lipenghua/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/lipenghua/GitHub/SLAMbook/Ch9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 run_vo"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="run_vo/fast">
+				<Option output="/Users/lipenghua/GitHub/SLAMbook/Ch9/bin/run_vo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lipenghua/GitHub/SLAMbook/Ch9/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/usr/local/Cellar/eigen/3.3.4/include/eigen3"/>
+					<Add directory="/Users/lipenghua/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/lipenghua/GitHub/SLAMbook/Ch9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 run_vo/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/camera.cpp">
+			<Option target="myslam"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/config.cpp">
+			<Option target="myslam"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/frame.cpp">
+			<Option target="myslam"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/g2o_types.cpp">
+			<Option target="myslam"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/map.cpp">
+			<Option target="myslam"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/mappoint.cpp">
+			<Option target="myslam"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/visual_odometry.cpp">
+			<Option target="myslam"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/test/run_vo.cpp">
+			<Option target="run_vo"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/../../../../../usr/local/share/OpenCV/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/../../../../../usr/local/share/OpenCV/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/../../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/../../../../../usr/local/share/OpenCV/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/../../../Sophus/build/SophusConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\Sophus\build\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake_modules/FindCSparse.cmake">
+			<Option virtualFolder="CMake Files\cmake_modules\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/cmake_modules/FindG2O.cmake">
+			<Option virtualFolder="CMake Files\cmake_modules\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/Users/lipenghua/GitHub/SLAMbook/Ch9/test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\test\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
